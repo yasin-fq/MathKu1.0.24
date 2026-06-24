@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MathKu - Belajar Berhitung</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#FEF9EF;--bg-alt:#FFF5E4;--card:#FFFFFF;--text:#3D3D3D;
+    --text-light:#9E9E9E;--accent:#FF7043;--accent-hover:#E64A19;
+    --success:#4CAF50;--danger:#EF5350;--border:#F0E6D6;
+    --shadow:0 4px 20px rgba(0,0,0,0.06);--shadow-lg:0 8px 40px rgba(0,0,0,0.1);
+    --radius:16px;--radius-sm:10px;
+  }
+  html{font-size:16px}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+  .bg-shape{position:fixed;border-radius:50%;pointer-events:none;z-index:0;opacity:0.06}
+  .bg-shape:nth-child(1){width:300px;height:300px;background:#26A69A;top:-80px;left:-80px;animation:bf 18s ease-in-out infinite}
+  .bg-shape:nth-child(2){width:220px;height:220px;background:#EC407A;top:30%;right:-60px;animation:bf 22s ease-in-out infinite reverse}
+  .bg-shape:nth-child(3){width:180px;height:180px;background:#FFA726;bottom:10%;left:10%;animation:bf 15s ease-in-out infinite 3s}
+  .bg-shape:nth-child(4){width:260px;height:260px;background:#AB47BC;bottom:-100px;right:15%;animation:bf 20s ease-in-out infinite 5s}
+  .bg-shape:nth-child(5){width:140px;height:140px;background:#42A5F5;top:50%;left:40%;animation:bf 16s ease-in-out infinite 2s}
+  @keyframes bf{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,15px) scale(0.95)}}
+
+  #app{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:16px;min-height:100vh}
+  .screen{display:none;padding:16px;max-width:860px;margin:0 auto}
+  .screen.active{display:block;animation:sIn .35s ease both}
+  @keyframes sIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+  .save-toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+    background:#4CAF50;color:#fff;padding:10px 24px;border-radius:30px;
+    font-size:.85rem;font-weight:600;z-index:300;pointer-events:none;
+    box-shadow:0 4px 16px rgba(76,175,80,0.35);
+    transition:transform .4s ease, opacity .4s ease;opacity:0;
+  }
+  .save-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+  .home-header{text-align:center;padding:28px 0 8px}
+  .home-title{font-size:2.6rem;font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,#FF7043,#EC407A,#AB47BC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+  .home-subtitle{font-size:1rem;color:var(--text-light);margin-top:6px}
+  .save-indicator{font-size:.75rem;color:var(--success);margin-top:4px;opacity:.7}
+
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:28px}
+  .cat-card{background:var(--card);border-radius:var(--radius);padding:24px 20px;box-shadow:var(--shadow);cursor:pointer;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;border:2px solid transparent}
+  .cat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+  .cat-card:active{transform:translateY(-1px) scale(.98)}
+  .cat-card.completed{border-color:#FFD54F}
+  .cat-card.completed::after{content:'Selesai';position:absolute;top:12px;right:-28px;background:#FFD54F;color:#5D4037;font-size:.7rem;font-weight:700;padding:3px 32px;transform:rotate(45deg);letter-spacing:.5px}
+  .cat-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#fff;margin-bottom:14px}
+  .cat-icon-emoji{font-size:1.8rem;font-weight:400}
+  .cat-name{font-size:1.05rem;font-weight:700;margin-bottom:4px}
+  .cat-progress{font-size:.82rem;color:var(--text-light)}
+  .cat-bar{width:100%;height:5px;background:#F0ECE4;border-radius:3px;margin-top:10px;overflow:hidden}
+  .cat-bar-fill{height:100%;border-radius:3px;transition:width .5s}
+
+  .level-header{display:flex;align-items:center;gap:12px;padding:20px 0 6px}
+  .btn-back{width:42px;height:42px;border-radius:12px;border:2px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--text);transition:background .2s,border-color .2s;flex-shrink:0}
+  .btn-back:hover{background:var(--bg-alt);border-color:var(--text-light)}
+  .level-title{font-size:1.35rem;font-weight:800}
+  .level-desc{font-size:.88rem;color:var(--text-light);margin:4px 0 24px 54px}
+  .level-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:14px;padding-bottom:40px}
+  .level-node{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+  .level-node.locked{cursor:default}
+  .level-circle{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;color:#fff;transition:transform .2s,box-shadow .2s;position:relative}
+  .level-node:not(.locked) .level-circle:hover{transform:scale(1.1);box-shadow:0 4px 16px rgba(0,0,0,.15)}
+  .level-node.locked .level-circle{background:#E0E0E0!important;color:#BDBDBD!important}
+  .level-node.locked .level-circle::after{content:'';position:absolute;bottom:6px;right:6px;width:14px;height:11px;background:#BDBDBD;border-radius:2px}
+  .level-node.locked .level-circle::before{content:'';position:absolute;bottom:14px;right:8px;z-index:1;width:8px;height:8px;border:2px solid #BDBDBD;border-bottom:none;border-radius:4px 4px 0 0}
+  .level-node.current .level-circle{animation:pr 2s ease-in-out infinite}
+  @keyframes pr{0%,100%{box-shadow:0 0 0 0 rgba(255,112,67,.4)}50%{box-shadow:0 0 0 8px rgba(255,112,67,0)}}
+  .level-stars{font-size:.72rem;color:#FFD54F;letter-spacing:1px;min-height:14px}
+  .level-node.locked .level-stars{color:#E0E0E0}
+  .level-label{font-size:.68rem;color:var(--text-light);text-align:center;line-height:1.2;max-width:80px}
+
+  .quiz-top{display:flex;align-items:center;justify-content:space-between;padding:16px 0;flex-wrap:wrap;gap:8px}
+  .quiz-top-left{display:flex;align-items:center;gap:12px}
+  .quiz-progress-text{font-size:.9rem;font-weight:600;color:var(--text-light)}
+  .quiz-dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+  .quiz-dot{width:10px;height:10px;border-radius:50%;background:#E0DCD4;transition:background .3s,transform .3s}
+  .quiz-dot.done{background:var(--success);transform:scale(1.1)}
+  .quiz-dot.wrong{background:var(--danger)}
+  .quiz-dot.current{background:var(--accent);transform:scale(1.25)}
+  .quiz-cat-badge{font-size:.78rem;font-weight:700;color:#fff;padding:4px 12px;border-radius:20px}
+  .quiz-timer{font-size:.88rem;font-weight:700;color:var(--text);padding:4px 12px;background:var(--bg-alt);border-radius:20px}
+  .quiz-timer.urgent{color:var(--danger);background:#FFEBEE;animation:tp 1s ease infinite}
+  @keyframes tp{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+  .quiz-card{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:24px 20px;
+    box-shadow:var(--shadow-lg);
+    text-align:center;
+    margin-top:12px;
+    min-height:calc(100vh - 220px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:24px;
+    position:relative;
+    border:2px solid var(--border);
+    overflow:hidden;
+  }
+  .quiz-question{
+    font-size:2rem;
+    font-weight:800;
+    color:var(--text);
+    line-height:1.3;
+    word-break:break-all;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  
+  /* PERBAIKAN EMOJI AGAR TIDAK BERTUMPUK */
+  .quiz-emoji-area{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:12px; /* Jarak antar kelompok emoji dan tanda +/- */
+    padding:16px;
+    background:var(--bg-alt);
+    border-radius:var(--radius-sm);
+    max-width:100%;
+    max-height:40vh;
+    overflow-y:auto;
+    line-height:1.5;
+  }
+  .emoji-group {
+    display: flex;
+    flex-wrap: wrap; /* Emoji di dalam kotak bisa turun baris dengan rapi */
+    align-items: center;
+    justify-content: center;
+    max-width: 45%; /* Batasi lebar kotak agar selalu berdampingan */
+    gap: 2px;
+    background: rgba(255,255,255,0.8);
+    padding: 8px 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    font-size: 1.6rem;
+  }
+  .emoji-op {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .quiz-input-wrap{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    width:100%;
+    max-width:320px;
+  }
+  .quiz-input{flex:1;height:52px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.5rem;font-weight:700;text-align:center;outline:none;transition:border-color .2s;background:var(--bg);font-family:inherit;color:var(--text)}
+  .quiz-input:focus{border-color:var(--accent)}
+  .quiz-input:disabled{opacity:.5}
+  .btn-submit{height:52px;padding:0 24px;border:none;border-radius:var(--radius-sm);background:var(--accent);color:#fff;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;font-family:inherit;white-space:nowrap}
+  .btn-submit:hover{background:var(--accent-hover)}
+  .btn-submit:active{transform:scale(.95)}
+  .btn-submit:disabled{opacity:.4;cursor:default;transform:none}
+  .quiz-feedback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:var(--radius);opacity:0;pointer-events:none;transition:opacity .3s}
+  .quiz-feedback.show{opacity:1;pointer-events:auto}
+  .quiz-feedback.correct{background:rgba(76,175,80,.12)}
+  .quiz-feedback.wrong{background:rgba(239,83,80,.12)}
+  .feedback-icon{font-size:3rem;margin-bottom:8px}
+  .feedback-text{font-size:1.15rem;font-weight:700}
+  .feedback-answer{font-size:.95rem;color:var(--text-light);margin-top:4px}
+
+  .result-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:20px 0}
+  .result-card{background:var(--card);border-radius:var(--radius);padding:40px 32px;box-shadow:var(--shadow-lg);text-align:center;max-width:440px;width:100%;border:2px solid var(--border)}
+  .score-ring-wrap{position:relative;width:140px;height:140px;margin:0 auto 20px}
+  .score-ring{width:100%;height:100%;transform:rotate(-90deg)}
+  .score-ring-bg{fill:none;stroke:#F0ECE4;stroke-width:10}
+  .score-ring-fg{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.2s}
+  .score-number{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .score-pct{font-size:2.2rem;font-weight:900;line-height:1}
+  .score-label{font-size:.78rem;color:var(--text-light);margin-top:2px}
+  .result-detail{font-size:.95rem;color:var(--text-light);margin-bottom:8px}
+  .star-progress-bar{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+  .star-slot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:transform .3s,background .3s}
+  .star-slot.earned{background:#FFF8E1;color:#FFB300;transform:scale(1.1)}
+  .star-slot.empty{background:#F5F0E8;color:#D0C8B8}
+  .result-hint{font-size:.82rem;color:var(--text-light);margin-bottom:4px;padding:6px 12px;background:var(--bg-alt);border-radius:8px;display:inline-block}
+  .result-msg{font-size:1.1rem;font-weight:700;margin:16px 0 24px;line-height:1.4}
+  .result-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .btn{height:48px;padding:0 24px;border:none;border-radius:var(--radius-sm);font-size:.95rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;font-family:inherit}
+  .btn:active{transform:scale(.96)}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:var(--accent-hover)}
+  .btn-secondary{background:var(--bg-alt);color:var(--text);border:2px solid var(--border)}
+  .btn-secondary:hover{background:#F0ECE4}
+
+  .overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .4s;padding:20px}
+  .overlay.show{opacity:1;pointer-events:auto}
+  .celeb-card{background:var(--card);border-radius:20px;padding:40px 32px;text-align:center;max-width:380px;width:100%;box-shadow:var(--shadow-lg);transform:scale(.8);transition:transform .4s}
+  .overlay.show .celeb-card{transform:scale(1)}
+  .celeb-trophy{width:80px;height:80px;margin:0 auto 16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .celeb-title{font-size:1.5rem;font-weight:900;margin-bottom:8px}
+  .celeb-desc{font-size:1rem;color:var(--text-light);margin-bottom:24px;line-height:1.5}
+
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:200;overflow:hidden}
+  .confetti-p{position:absolute;top:-20px;border-radius:3px;animation:cfall linear forwards}
+  @keyframes cfall{0%{transform:translateY(0) rotate(0) scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(105vh) rotate(900deg) scale(.5);opacity:0}}
+
+  .home-footer{text-align:center;padding:32px 0 20px}
+  .btn-reset{background:none;border:none;color:var(--text-light);font-size:.8rem;cursor:pointer;text-decoration:underline;font-family:inherit;transition:color .2s}
+  .btn-reset:hover{color:var(--danger)}
+  .reset-confirm{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:.82rem;color:var(--danger)}
+  .reset-confirm button{background:var(--danger);color:#fff;border:none;padding:4px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;font-weight:600;font-family:inherit}
+  .reset-confirm .btn-cancel{background:none;color:var(--text-light);text-decoration:underline;padding:0}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  .anim-shake{animation:shake .4s ease}
+  @keyframes pop{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+  .anim-pop{animation:pop .4s ease both}
+
+  @media(max-width:520px){
+    .home-title{font-size:2rem}
+    .cat-grid{grid-template-columns:1fr 1fr;gap:10px}
+    .cat-card{padding:16px 14px}
+    .cat-icon{width:44px;height:44px;font-size:1.3rem;border-radius:11px}
+    .cat-name{font-size:.92rem}
+    .quiz-question{font-size:1.6rem;}
+    .quiz-card{padding:20px 16px; min-height:calc(100vh - 200px);}
+    .emoji-group{font-size:1.3rem; max-width:42%;}
+    .emoji-op{font-size:1.5rem;}
+    .level-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px}
+    .level-circle{width:52px;height:52px;font-size:1.05rem}
+    .result-card{padding:28px 20px}
+    .score-ring-wrap{width:120px;height:120px}
+    .score-pct{font-size:1.8rem}
+    .quiz-input-wrap{max-width:100%;}
+    .quiz-input{height:48px;font-size:1.3rem;}
+    .btn-submit{height:48px;font-size:.9rem;padding:0 16px;}
+  }
+  @media(max-width:360px){
+    .cat-grid{grid-template-columns:1fr}
+    .emoji-group{font-size:1.1rem;}
+    .quiz-question{font-size:1.4rem;}
+  }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div>
+<div id="app">
+  <div id="screen-home" class="screen"></div>
+  <div id="screen-levels" class="screen"></div>
+  <div id="screen-quiz" class="screen"></div>
+  <div id="screen-result" class="screen"></div>
+</div>
+<div id="overlay" class="overlay"></div>
+<div id="confetti"></div>
+<div class="save-toast" id="save-toast">Progres tersimpan</div>
+
+<script>
+/* ================================================================
+   SISTEM PENYIMPANAN GANDA — localStorage + Cookie fallback
+   ================================================================ */
+var SAVE_KEY = 'mathku_v14'; // Versi diperbarui
+
+function setCookie(name, val, days) {
+  var d = new Date();
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = name + '=' + encodeURIComponent(val) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+}
+function getCookie(name) {
+  var pairs = document.cookie.split(';');
+  for (var i = 0; i < pairs.length; i++) {
+    var c = pairs[i].trim();
+    if (c.indexOf(name + '=') === 0) {
+      return decodeURIComponent(c.substring(name.length + 1));
+    }
+  }
+  return null;
+}
+function deleteCookie(name) {
+  document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Lax';
+}
+
+function saveProg(p) {
+  var json = JSON.stringify(p);
+  try { localStorage.setItem(SAVE_KEY, json); } catch(e) {}
+  try { setCookie(SAVE_KEY, json, 365); } catch(e) {}
+}
+
+function loadProg() {
+  var json = null;
+  try { json = localStorage.getItem(SAVE_KEY); } catch(e) {}
+  if (!json) { json = getCookie(SAVE_KEY); }
+  if (json) {
+    try {
+      var p = JSON.parse(json);
+      if (typeof p.accessGranted === 'undefined') p.accessGranted = false;
+      if (typeof p.userName !== 'string') p.userName = "";
+      for (var i = 0; i < CATS.length; i++) {
+        var c = CATS[i];
+        if (!p[c.id] || typeof p[c.id] !== 'object') p[c.id] = { unlocked: 1, stars: {} };
+        if (typeof p[c.id].unlocked !== 'number' || p[c.id].unlocked < 1) p[c.id].unlocked = 1;
+        if (!p[c.id].stars || typeof p[c.id].stars !== 'object') p[c.id].stars = {};
+        for (var j = 1; j <= c.maxLv; j++) {
+          if (typeof p[c.id].stars[j] !== 'number' || p[c.id].stars[j] < 0) p[c.id].stars[j] = 0;
+          if (p[c.id].stars[j] > 3) p[c.id].stars[j] = 3;
+        }
+      }
+      if (p['ujian'].unlocked < 8) p['ujian'].unlocked = 8;
+      try { if (!localStorage.getItem(SAVE_KEY)) localStorage.setItem(SAVE_KEY, JSON.stringify(p)); } catch(e) {}
+      return p;
+    } catch(e) { }
+  }
+  return defProg();
+}
+
+window.addEventListener('beforeunload', function() { saveProg(progress); });
+window.addEventListener('pagehide', function() { saveProg(progress); });
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') {
+        saveProg(progress);
+    }
+});
+
+var saveToastTimer = null;
+function showSaveToast() {
+  var el = document.getElementById('save-toast');
+  if (!el) return;
+  el.classList.add('show');
+  if (saveToastTimer) clearTimeout(saveToastTimer);
+  saveToastTimer = setTimeout(function() { el.classList.remove('show'); }, 2000);
+}
+
+/* ================================================================
+   KONFIGURASI KATEGORI
+   ================================================================ */
+var CATS=[
+  {id:'mencacah',name:'Mencacah',icon:'\uD83D\uDC46',isEmoji:true,color:'#8D6E63',maxLv:2},
+  {id:'penjumlahan',name:'Penjumlahan',icon:'+',isEmoji:false,color:'#26A69A',maxLv:9},
+  {id:'pengurangan',name:'Pengurangan',icon:'\u2212',isEmoji:false,color:'#FF7043',maxLv:9},
+  {id:'jumlah_kurang',name:'Jumlah & Kurang',icon:'\u00B1',isEmoji:false,color:'#AB47BC',maxLv:4},
+  {id:'perkalian',name:'Perkalian',icon:'\u00D7',isEmoji:false,color:'#66BB6A',maxLv:9},
+  {id:'pembagian',name:'Pembagian',icon:'\u00F7',isEmoji:false,color:'#42A5F5',maxLv:9},
+  {id:'kali_bagi',name:'Kali & Bagi',icon:'\u00D7\u00F7',isEmoji:false,color:'#FFA726',maxLv:4},
+  {id:'advance',name:'Advance',icon:'\u2217',isEmoji:false,color:'#EC407A',maxLv:4},
+  {id:'ujian',name:'Ujian',icon:'\uD83C\uDFC6',isEmoji:true,color:'#5C6BC0',maxLv:7}
+];
+
+var UJ_SEC=[
+  {id:'penjumlahan',name:'Penjumlahan',color:'#26A69A',maxLv:9,gen:genPenjumlahan,time:10},
+  {id:'pengurangan',name:'Pengurangan',color:'#FF7043',maxLv:9,gen:genPengurangan,time:10},
+  {id:'jumlah_kurang',name:'Jumlah & Kurang',color:'#AB47BC',maxLv:4,gen:genJumlahKurang,time:15},
+  {id:'perkalian',name:'Perkalian',color:'#66BB6A',maxLv:9,gen:genPerkalian,time:15},
+  {id:'pembagian',name:'Pembagian',color:'#42A5F5',maxLv:9,gen:genPembagian,time:15},
+  {id:'kali_bagi',name:'Kali & Bagi',color:'#FFA726',maxLv:4,gen:genKaliBagi,time:20},
+  {id:'advance',name:'Advance',color:'#EC407A',maxLv:4,gen:genAdvance,time:20}
+];
+
+var DEV_CODE = "211221"; 
+
+var FRUIT_E=['\uD83C\uDF4E','\uD83C\uDF4A','\uD83C\uDF4B','\uD83C\uDF4C','\uD83C\uDF47','\uD83C\uDF49','\uD83C\uDF53','\uD83C\uDF45','\uD83C\uDF46','\uD83C\uDF3D'];
+var ANIMAL_E=['\uD83D\uDC36','\uD83D\uDC31','\uD83D\uDC30','\uD83D\uDC39','\uD83D\uDC38','\uD83D\uDC2F','\uD83D\uDC37','\uD83D\uDC35','\uD83D\uDC34','\uD83D\uDC3B'];
+var MSG_LU=['Luar biasa, {nama}!','Hebat sekali, {nama}!','Kamu menakjubkan, {nama}!','Fantastis, {nama}!','Keren banget, {nama}!'];
+var MSG_CD=['Juara Matematika, {nama}!','Master sejati, {nama}!','Luar biasa hebat, {nama}!','Luar biasa pintar, {nama}!'];
+var MSG_G=['Bagus sekali, {nama}!','Kerja kerasmu membuahkan hasil, {nama}!','Terus semangat, {nama}!','Hampir sampai, {nama}!'];
+var MSG_TA=['Jangan menyerah, {nama}!','Kamu pasti bisa, {nama}!','Terus berlatih ya, {nama}!','Semangat terus, {nama}!'];
+
+function defProg(){
+  var p={ accessGranted: false, userName: "" };
+  for(var i=0;i<CATS.length;i++){var c=CATS[i];p[c.id]={unlocked:1,stars:{}};for(var j=1;j<=c.maxLv;j++)p[c.id].stars[j]=0;}
+  p['ujian'].unlocked=8;
+  return p;
+}
+
+var progress = loadProg();
+
+function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function pk(a){return a[ri(0,a.length-1)];}
+function getName() { return progress.userName || "Kamu"; }
+function pkN(arr) { return pk(arr).replace(/{nama}/g, getName()); }
+function comp(a,op,b){if(op==='+')return a+b;if(op==='\u2212'||op==='-')return a-b;if(op==='\u00D7'||op==='*')return a*b;if(op==='\u00F7'||op==='/')return b!==0?a/b:NaN;return NaN;}
+function isPI(n){return typeof n==='number'&&isFinite(n)&&n>0&&Number.isInteger(n);}
+function sg(fn,mt){mt=mt||200;for(var i=0;i<mt;i++){try{var r=fn();if(r&&typeof r.answer==='number'&&isPI(r.answer)&&r.question)return r;}catch(e){}}return{question:'1 + 1',answer:2};}
+
+function eRow(e,c,pl){var s='';for(var i=0;i<c;i++)s+=e+' ';return s;}
+// Helper HTML khusus untuk mengelompokkan emoji (agar tidak bertumpuk)
+function eRowHTML(e, c) {
+  var s = '';
+  for(var i=0; i<c; i++) s += e + ' ';
+  return '<span class="emoji-group">'+s+'</span>';
+}
+function fmtT(s){var m=Math.floor(s/60),sec=s%60;return(m<10?'0':'')+m+':'+(sec<10?'0':'')+sec;}
+
+function genMencacah(lv){var mx=lv===1?10:25;var c=ri(1,mx);var e=pk(FRUIT_E.concat(ANIMAL_E));return{question:eRow(e,c,lv===1?10:15),answer:c,isEmoji:true,emojiOnly:true};}
+
+function genPenjumlahan(lv){return sg(function(){
+  if(lv===1){var a=ri(1,5),b=ri(1,5);var e=pk(FRUIT_E);return{question:a+' + '+b,answer:a+b,isEmoji:true,emojiDisplay:eRowHTML(e,a)+'<span class="emoji-op">+</span>'+eRowHTML(e,b)};}
+  if(lv<=8){var R=[[1,5],[1,10],[1,50],[10,50],[10,100],[10,99,100,999],[100,999],[100,999,1000,9999]];var r=R[lv-1];var a,b;if(r.length===4){a=ri(r[0],r[1]);b=ri(r[2],r[3]);}else{a=ri(r[0],r[1]);b=ri(r[0],r[1]);}return{question:a+' + '+b,answer:a+b};}
+  var ops=ri(2,3),nums=[];for(var i=0;i<=ops;i++)nums.push(ri(1,200));var ans=nums.reduce(function(a,b){return a+b;},0);if(ans>9999)return null;return{question:nums.join(' + '),answer:ans};
+});}
+
+function genPengurangan(lv){return sg(function(){
+  if(lv===1){var a=ri(2,5),b=ri(1,a-1);var e=pk(ANIMAL_E);return{question:a+' \u2212 '+b,answer:a-b,isEmoji:true,emojiDisplay:eRowHTML(e,a)+'<span class="emoji-op">\u2212</span>'+eRowHTML(e,b)};}
+  if(lv<=8){var R=[[1,5],[1,10],[1,50],[10,50],[10,100],[100,999,10,99],[100,999],[1000,9999,100,999]];var r=R[lv-1];var a,b;
+  if(r.length===4){a=ri(r[0],r[1]);b=ri(r[2],r[3]);if(a<b){var t=a;a=b;b=t;}}else{a=ri(r[0],r[1]);b=ri(r[0],r[1]);if(a<=b)a=b+ri(1,Math.max(1,r[1]-r[0]));}var ans=a-b;if(ans<=0)return null;return{question:a+' \u2212 '+b,answer:ans};}
+  var ops=ri(2,3),total=ri(100,500),nums=[total],rem=total;for(var i=1;i<=ops;i++){var mx=rem-(ops-i);if(mx<1)return null;nums.push(ri(1,Math.min(mx,200)));rem-=nums[nums.length-1];}if(rem<=0)return null;return{question:nums.join(' \u2212 '),answer:rem};
+});}
+
+function genJumlahKurang(lv){return sg(function(){
+  if(lv===1){var s=ri(1,9),p=ri(10,99);if(Math.random()<.5)return{question:s+' + '+p,answer:s+p};return{question:p+' + '+s,answer:p+s};}
+  if(lv===2){var p=ri(11,99),s=ri(1,9);return{question:p+' \u2212 '+s,answer:p-s};}
+  if(lv===3){var op=Math.random()<.5?'+':'\u2212';var a=ri(1,9),b=ri(1,9);if(op==='\u2212'&&a<=b){var t=a;a=b;b=t;}var ans=comp(a,op,b);if(ans<=0)return null;return{question:a+' '+op+' '+b,answer:ans};}
+  var op=Math.random()<.5?'+':'\u2212';var a=ri(10,99),b=ri(10,99);if(op==='\u2212'&&a<=b){var t=a;a=b;b=t;}var ans=comp(a,op,b);if(ans<=0)return null;return{question:a+' '+op+' '+b,answer:ans};
+});}
+
+function genPerkalian(lv){return sg(function(){
+  if(lv<=8){var R=[[1,5],[1,10],[1,50],[10,50],[10,100],[10,99,100,999],[100,999],[100,999,1000,9999]];var r=R[lv-1];var a,b;if(r.length===4){a=ri(r[0],r[1]);b=ri(r[2],r[3]);}else{a=ri(r[0],r[1]);b=ri(r[0],r[1]);}return{question:a+' \u00D7 '+b,answer:a*b};}
+  var ops=ri(2,3),mx=ops===2?25:10,nums=[];for(var i=0;i<=ops;i++)nums.push(ri(2,mx));var ans=nums.reduce(function(a,b){return a*b;},1);if(ans>50000)return null;return{question:nums.join(' \u00D7 '),answer:ans};
+});}
+
+function genPembagian(lv){return sg(function(){
+  if(lv===1){
+    var d=ri(1,10), q=ri(1,10);
+    return {question: (d*q)+' \u00F7 '+d, answer: q};
+  }
+  if(lv===2){
+    var d=ri(1,50), q=ri(1,50);
+    return {question: (d*q)+' \u00F7 '+d, answer: q};
+  }
+  if(lv===3){
+    var d=ri(1,100), q=ri(1,100);
+    return {question: (d*q)+' \u00F7 '+d, answer: q};
+  }
+  if(lv===4){
+    var d=ri(10,100), q=ri(10,100);
+    return {question: (d*q)+' \u00F7 '+d, answer: q};
+  }
+  if(lv===5){
+    var d=ri(10,500), q=ri(1,500);
+    return {question: (d*q)+' \u00F7 '+d, answer: q};
+  }
+  if(lv===6){
+    var d=ri(10,1000), q=ri(1,1000);
+    return {question: (d*q)+' \u00F7 '+d, answer: q};
+  }
+  if(lv===7){
+    var d=ri(1,9);
+    var qMin=Math.ceil(1000/d), qMax=Math.floor(9999/d);
+    if(qMin>qMax) return null;
+    var q=ri(qMin,qMax);
+    return {question: (d*q)+' \u00F7 '+d, answer: q};
+  }
+  if(lv===8){
+    var d=ri(2,99);
+    var qMin=Math.ceil(1000/d), qMax=Math.floor(9999/d);
+    if(qMin>qMax) return null;
+    var q=ri(qMin,qMax);
+    return {question: (d*q)+' \u00F7 '+d, answer: q};
+  }
+  var ops=ri(2,3), q=ri(1,100), divs=[], div=q;
+  for(var i=0;i<ops;i++){
+    var d=ri(2,100);
+    divs.push(d);
+    div*=d;
+  }
+  if(div>100000) return null;
+  return {question: [div].concat(divs).join(' \u00F7 '), answer: q};
+});}
+
+function genKaliBagi(lv){return sg(function(){
+  if(lv===1){var s=ri(2,9),p=ri(10,99);if(Math.random()<.5)return{question:s+' \u00D7 '+p,answer:s*p};return{question:p+' \u00D7 '+s,answer:p*s};}
+  if(lv===2){var s=ri(2,9);var qm=Math.floor(99/s);if(qm<2)return null;var q=ri(2,qm);var p=s*q;if(p<10)return null;return{question:p+' \u00F7 '+s,answer:q};}
+  if(lv===3){var op=Math.random()<.5?'\u00D7':'\u00F7';if(op==='\u00D7'){var a=ri(1,9),b=ri(1,9);return{question:a+' \u00D7 '+b,answer:a*b};}var b=ri(2,9);var qm=Math.floor(9/b);if(qm<1)return null;var q=ri(1,qm);var a=b*q;if(a<1||a>9)return null;return{question:a+' \u00F7 '+b,answer:q};}
+  var op=Math.random()<.5?'\u00D7':'\u00F7';if(op==='\u00D7'){var a=ri(10,99),b=ri(10,99);return{question:a+' \u00D7 '+b,answer:a*b};}var b=ri(2,49);var qm=Math.floor(99/b);if(qm<1)return null;var q=ri(1,qm);var a=b*q;if(a<10||a>99)return null;return{question:a+' \u00F7 '+b,answer:q};
+},300);}
+
+function genAdvance(lv){return sg(function(){
+  var rng={1:[10,99],2:[10,99],3:[1,9],4:[10,99]};var ops={1:['+','\u2212'],2:['\u00D7','\u00F7'],3:['+','\u2212','\u00D7','\u00F7'],4:['+','\u2212','\u00D7','\u00F7']};
+  var mn=rng[lv][0],mx=rng[lv][1],os=ops[lv];var o1=pk(os),o2=pk(os);if(o1==='\u00F7'&&o2==='\u00F7')return null;var hd=(o1==='\u00F7'||o2==='\u00F7');
+  if(!hd){var a=ri(mn,mx),b=ri(mn,mx),c=ri(mn,mx);var inner=comp(a,o1,b);if(!isPI(inner))return null;var res=comp(inner,o2,c);if(!isPI(res))return null;var np=(o1==='+'||o1==='\u2212')&&(o2==='\u00D7');return{question:np?'('+a+' '+o1+' '+b+') '+o2+' '+c:a+' '+o1+' '+b+' '+o2+' '+c,answer:res};}
+  if(o1==='\u00F7'){var bm=(lv===3)?9:30;var b=ri(Math.max(mn,2),Math.min(mx,bm));var qm=(lv===3)?Math.floor(9/b):Math.floor(mx/b);if(qm<1)return null;var q=ri(1,qm);var a=b*q;if(a<mn||a>mx)return null;
+  if(o2==='+'){var c=ri(mn,mx);return{question:a+' \u00F7 '+b+' + '+c,answer:q+c};}
+  if(o2==='\u2212'){var cm=Math.min(mx,q-1);if(cm<mn)return null;var c=ri(mn,cm);var r=q-c;if(r<=0)return null;return{question:a+' \u00F7 '+b+' \u2212 '+c,answer:r};}
+  if(o2==='\u00D7'){var cm2=(lv===3)?Math.min(mx,Math.floor(500/Math.max(1,q))):Math.min(mx,Math.floor(5000/Math.max(1,q)));if(cm2<mn)return null;var c=ri(mn,cm2);var r=q*c;if(!isPI(r))return null;return{question:a+' \u00F7 '+b+' \u00D7 '+c,answer:r};}return null;}
+  if(o2==='\u00F7'){var a,b,inner,c;
+  if(o1==='+'){a=ri(mn,mx);b=ri(mn,mx);inner=a+b;var dv=[];for(var d=Math.max(mn,1);d<=Math.min(mx,inner-1);d++){if(inner%d===0)dv.push(d);}if(!dv.length)return null;c=pk(dv);return{question:'('+a+' + '+b+') \u00F7 '+c,answer:inner/c};}
+  if(o1==='\u2212'){a=ri(mn,mx);b=ri(mn,mx);if(a<=b){var t=a;a=b;b=t;}inner=a-b;if(inner<=0)return null;var dv=[];for(var d=Math.max(mn,1);d<=Math.min(mx,inner);d++){if(inner%d===0)dv.push(d);}if(!dv.length)return null;c=pk(dv);return{question:'('+a+' \u2212 '+b+') \u00F7 '+c,answer:inner/c};}
+  if(o1==='\u00D7'){a=ri(mn,mx);b=ri(mn,mx);inner=a*b;if(inner>100000)return null;var dv=[];for(var d=Math.max(mn,1);d<=Math.min(mx,inner-1);d++){if(inner%d===0)dv.push(d);}if(!dv.length)return null;c=pk(dv);return{question:a+' \u00D7 '+b+' \u00F7 '+c,answer:inner/c};}return null;}
+  return null;
+},600);}
+
+function genUjianQ(catId,genFn,maxLv){var qs=[],used={},att=0;while(qs.length<10&&att<1000){var lv=ri(1,maxLv);var q=genFn(lv);if(q&&!used[q.question]){used[q.question]=true;q.level=lv;qs.push(q);}att++;}while(qs.length<10){var q=genFn(ri(1,maxLv));q.level=ri(1,maxLv);qs.push(q);}return qs;}
+function genQ(catId,lv){if(catId==='mencacah')return genMencacah(lv);var fn={penjumlahan:genPenjumlahan,pengurangan:genPengurangan,jumlah_kurang:genJumlahKurang,perkalian:genPerkalian,pembagian:genPembagian,kali_bagi:genKaliBagi,advance:genAdvance};return(fn[catId]||function(){return{question:'1+1',answer:2};})(lv);}
+
+var curCat=null,curLv=null,quizQ=[],quizIdx=0,quizAns=[],quizLock=false;
+var timerInt=null,timeLeft=0,totalTime=0,isUjian=false,ujSecIdx=-1,examIntroIntv=null;
+
+function sw(id){var s=document.querySelectorAll('.screen');for(var i=0;i<s.length;i++)s[i].classList.remove('active');document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function startApp() {
+  if (!progress.accessGranted) {
+    showAccessScreen();
+  } else {
+    renderHome();
+  }
+}
+
+function showAccessScreen() {
+  var ov = document.getElementById('overlay');
+  var h = '<div class="celeb-card" style="max-width:380px; text-align:center;">';
+  h += '<div class="home-title" style="font-size:2rem; margin-bottom:20px; -webkit-text-fill-color: var(--accent); background: none;">MathKu</div>';
+  h += '<div style="font-size:.9rem; color:var(--text-light); margin-bottom:24px;">Selamat datang! Silakan masukkan Nama dan Kode Akses yang diberikan oleh pengembang untuk melanjutkan.</div>';
+  h += '<input type="text" id="access-name" class="quiz-input" placeholder="Nama Kamu" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
+  h += '<input type="text" id="access-code" class="quiz-input" placeholder="Kode Akses" inputmode="numeric" maxlength="6" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
+  h += '<div id="access-error" style="color:var(--danger); font-size:.85rem; height:18px; margin-bottom:8px;"></div>';
+  h += '<button class="btn btn-primary" id="access-btn" style="width:100%; max-width:280px;">Buka Aplikasi</button>';
+  h += '</div>';
+  ov.innerHTML = h;
+  ov.classList.add('show');
+
+  document.getElementById('access-btn').addEventListener('click', function() {
+    var name = document.getElementById('access-name').value.trim();
+    var code = document.getElementById('access-code').value.trim();
+
+    if (!name) {
+      document.getElementById('access-error').textContent = 'Nama tidak boleh kosong.';
+      return;
+    }
+    if (code !== DEV_CODE) {
+      document.getElementById('access-error').textContent = 'Kode akses salah!';
+      document.getElementById('access-code').classList.add('anim-shake');
+      setTimeout(function(){ document.getElementById('access-code').classList.remove('anim-shake'); }, 400);
+      return;
+    }
+
+    progress.accessGranted = true;
+    progress.userName = name;
+    saveProg(progress);
+
+    ov.innerHTML = '<div class="celeb-card" style="max-width:380px; text-align:center;">' +
+                   '<div class="celeb-trophy" style="background:#E8F5E9"><svg width="40" height="40" viewBox="0 0 24 24" fill="#4CAF50"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>' +
+                   '<div class="celeb-title" style="color:#4CAF50">Akses Diberikan!</div>' +
+                   '<div class="celeb-desc">Halo <strong>'+name+'</strong>, selamat memulai. Mari biasakan berdoa sebelum memulai pelajaran.</div>' +
+                   '<button class="btn btn-primary" id="access-continue" style="width:100%">Lanjut</button></div>';
+
+    document.getElementById('access-continue').addEventListener('click', function() {
+      ov.classList.remove('show');
+      renderHome();
+    });
+  });
+}
+
+function renderHome(){
+  var el=document.getElementById('screen-home');
+  var h='<header class="home-header"><div class="home-title">MathKu</div><div class="home-subtitle">Halo '+getName()+', Belajar Berhitung Jadi Menyenangkan</div><div class="save-indicator" id="save-ind">\u2713 Progres tersimpan otomatis</div></header><div class="cat-grid">';
+  for(var i=0;i<CATS.length;i++){
+    var c=CATS[i],p=progress[c.id],ts=0;
+    for(var j=1;j<=c.maxLv;j++)ts+=Math.min(p.stars[j],3);
+    var pct=Math.round((ts/(c.maxLv*3))*100);
+    var done=p.unlocked>c.maxLv;
+    var ic=c.isEmoji?'cat-icon cat-icon-emoji':'cat-icon';
+    h+='<div class="cat-card'+(done?' completed':'')+'" data-cat="'+c.id+'">';
+    h+='<div class="'+ic+'" style="background:'+c.color+'">'+c.icon+'</div>';
+    h+='<div class="cat-name">'+c.name+'</div>';
+    if(c.id==='ujian')h+='<div class="cat-progress">7 kategori ujian</div>';
+    else if(done)h+='<div class="cat-progress">Semua level selesai</div>';
+    else h+='<div class="cat-progress">Level '+p.unlocked+' / '+c.maxLv+'</div>';
+    h+='<div class="cat-bar"><div class="cat-bar-fill" style="width:'+pct+'%;background:'+c.color+'"></div></div></div>';
+  }
+  h+='</div><footer class="home-footer"><button class="btn-reset" id="btn-reset">Reset Semua Progress</button><div id="reset-area"></div><div style="margin-top: 20px; font-size: 0.7rem; color: var(--text-light); text-align: center; line-height: 1.5; opacity: 0.8;">© 2026 Mathku 1.0.24 (Beta) | Hak Cipta Dilindungi.<br>Dibuat dengan ❤️ untuk pendidikan anak Indonesia.</div></footer>';
+  el.innerHTML=h;
+  var cards=el.querySelectorAll('.cat-card');
+  for(var i=0;i<cards.length;i++){(function(cd){cd.addEventListener('click',function(){var id=cd.getAttribute('data-cat');if(id==='ujian')openUjLevels();else openLevels(id);});})(cards[i]);}
+  document.getElementById('btn-reset').addEventListener('click',function(){
+    document.getElementById('reset-area').innerHTML='<div class="reset-confirm"><span>Yakin hapus semua progress?</span><button id="ry">Hapus</button><button class="btn-cancel" id="rn">Batal</button></div>';
+    document.getElementById('ry').addEventListener('click',function(){
+      var name = progress.userName;
+      var access = progress.accessGranted;
+      progress=defProg();
+      progress.userName = name;
+      progress.accessGranted = access;
+      saveProg(progress);
+      renderHome();
+    });
+    document.getElementById('rn').addEventListener('click',function(){document.getElementById('reset-area').innerHTML='';});
+  });
+  sw('screen-home');
+}
+
+function openLevels(catId){
+  var co=null;for(var i=0;i<CATS.length;i++){if(CATS[i].id===catId){co=CATS[i];break;}}if(!co)return;
+  curCat=co;var el=document.getElementById('screen-levels'),p=progress[catId];
+  var h='<div class="level-header"><button class="btn-back" id="bbl">\u2190</button>';
+  h+='<div class="level-title" style="color:'+co.color+'">'+co.name+'</div></div>';
+  h+='<div class="level-desc">Skor >70% untuk bintang. 3 bintang untuk naik level.</div><div class="level-grid">';
+  for(var i=1;i<=co.maxLv;i++){
+    var ul=i<=p.unlocked,st=p.stars[i]||0,ic=i===p.unlocked&&st<3;
+    var cls='level-node'+(ul?'':' locked')+(ic?' current':'');
+    h+='<div class="'+cls+'" data-level="'+i+'"><div class="level-circle" style="background:'+(ul?co.color:'')+'">'+i+'</div><div class="level-stars">';
+    if(ul){for(var s=0;s<3;s++)h+=s<st?'\u2605':'\u2606';}else h+='\u2606\u2606\u2606';
+    h+='</div></div>';
+  }
+  h+='</div>';el.innerHTML=h;sw('screen-levels');
+  document.getElementById('bbl').addEventListener('click',function(){renderHome();});
+  var nodes=el.querySelectorAll('.level-node:not(.locked)');
+  for(var i=0;i<nodes.length;i++){(function(n){n.addEventListener('click',function(){startQuiz(catId,parseInt(n.getAttribute('data-level')));});})(nodes[i]);}
+}
+
+function openUjLevels(){
+  var co=null;for(var i=0;i<CATS.length;i++){if(CATS[i].id==='ujian'){co=CATS[i];break;}}
+  curCat=co;var el=document.getElementById('screen-levels'),p=progress['ujian'];
+  var h='<div class="level-header"><button class="btn-back" id="bbl">\u2190</button>';
+  h+='<div class="level-title" style="color:'+co.color+'">'+co.name+'</div></div>';
+  h+='<div class="level-desc">Kuis dari semua level setiap kategori \u2022 10 soal \u2022 Waktu berbeda per kategori</div>';
+  h+='<div class="level-grid" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr))">';
+  for(var i=0;i<UJ_SEC.length;i++){
+    var sec=UJ_SEC[i],st=p.stars[i+1]||0;
+    h+='<div class="level-node'+(st>=3?' current':'')+'" data-ujidx="'+i+'">';
+    h+='<div class="level-circle" style="background:'+sec.color+'">'+(i+1)+'</div>';
+    h+='<div class="level-stars">';for(var s=0;s<3;s++)h+=s<st?'\u2605':'\u2606';h+='</div>';
+    h+='<div class="level-label" style="color:'+sec.color+';font-weight:600">'+sec.name+' ('+sec.time+'m)</div></div>';
+  }
+  h+='</div>';el.innerHTML=h;sw('screen-levels');
+  document.getElementById('bbl').addEventListener('click',function(){renderHome();});
+  var nodes=el.querySelectorAll('.level-node');
+  for(var i=0;i<nodes.length;i++){(function(n){n.addEventListener('click',function(){startUjian(parseInt(n.getAttribute('data-ujidx')));});})(nodes[i]);}
+}
+
+function startQuiz(catId,lv){
+  var co=null;for(var i=0;i<CATS.length;i++){if(CATS[i].id===catId){co=CATS[i];break;}}if(!co)return;
+  curCat=co;curLv=lv;quizQ=[];quizIdx=0;quizAns=[];quizLock=false;isUjian=false;ujSecIdx=-1;clrT();
+  var used={};var att=0;while(quizQ.length<10&&att<500){var q=genQ(catId,lv);if(!used[q.question]){used[q.question]=true;quizQ.push(q);}att++;}
+  while(quizQ.length<10)quizQ.push(genQ(catId,lv));renderQuiz();sw('screen-quiz');
+}
+
+function startUjian(si){
+  var sec=UJ_SEC[si];var co=null;for(var i=0;i<CATS.length;i++){if(CATS[i].id==='ujian'){co=CATS[i];break;}}
+  curCat=co;curLv=si+1;quizQ=[];quizIdx=0;quizAns=[];quizLock=false;isUjian=true;ujSecIdx=si;clrT();
+  quizQ=genUjianQ(sec.id,sec.gen,sec.maxLv);
+  totalTime=sec.time*60;timeLeft=totalTime;
+  
+  showExamIntro(si);
+}
+
+function showExamIntro(si){
+  clrT();
+  if(examIntroIntv) clearInterval(examIntroIntv);
+  var sec = UJ_SEC[si];
+  var el = document.getElementById('screen-quiz');
+  
+  var h = '<div class="quiz-top"><div class="quiz-top-left"><button class="btn-back" id="bqq">\u2190</button>';
+  h+='<span class="quiz-progress-text">Persiapan Ujian</span></div></div>';
+  h+='<div class="quiz-card" style="text-align:center; justify-content:center;">';
+  h+='<div style="font-size:2.5rem; margin-bottom:10px;">\uD83D\uDCDD</div>';
+  h+='<div class="result-msg" style="margin-bottom:16px; font-size:1.3rem;">Ujian: '+sec.name+'</div>';
+  h+='<div style="text-align:left; background:var(--bg-alt); padding:16px; border-radius:12px; max-width:340px; margin-bottom:20px; font-size:.9rem; line-height:1.6;">';
+  h+='<p style="margin-bottom:10px;"><strong>\u23F1 Waktu Ujian:</strong> Kamu punya waktu <strong>'+sec.time+' menit</strong> untuk mengerjakan 10 soal. Kerjakan dengan cepat tapi teliti!</p>';
+  h+='<p style="margin-bottom:0;"><strong>"Ya Allah, berkahilah ilmu yang kau berikan padaku."</p>';
+  h+='</div>';
+  h+='<div style="font-size:.95rem; color:var(--text-light); margin-bottom:4px;">Ujian dimulai dalam:</div>';
+  h+='<div id="countdown-timer" class="anim-pop" style="font-size:4rem; font-weight:900; color:var(--accent); margin:0;">5</div>';
+  h+='</div>';
+  el.innerHTML = h;
+  sw('screen-quiz');
+
+  document.getElementById('bqq').addEventListener('click', function(){
+    if(examIntroIntv) clearInterval(examIntroIntv);
+    openUjLevels();
+  });
+
+  var cd = 5;
+  var cdEl = document.getElementById('countdown-timer');
+  
+  examIntroIntv = setInterval(function(){
+    cd--;
+    if(cd > 0) {
+      cdEl.textContent = cd;
+      cdEl.classList.remove('anim-pop');
+      void cdEl.offsetWidth;
+      cdEl.classList.add('anim-pop');
+    } else if (cd === 0) {
+      cdEl.textContent = "Mulai!";
+      cdEl.style.color = "var(--success)";
+      cdEl.classList.remove('anim-pop');
+      void cdEl.offsetWidth;
+      cdEl.classList.add('anim-pop');
+    } else {
+      clearInterval(examIntroIntv);
+      renderQuiz();
+      startT();
+    }
+  }, 1000);
+}
+
+function startT(){clrT();updTD();timerInt=setInterval(function(){timeLeft--;updTD();if(timeLeft<=0){clrT();quizLock=true;while(quizAns.length<quizQ.length)quizAns.push(false);showResult();}},1000);}
+function clrT(){if(timerInt){clearInterval(timerInt);timerInt=null;}}
+function updTD(){var el=document.getElementById('qt');if(!el)return;el.textContent=fmtT(timeLeft);if(timeLeft<=60)el.classList.add('urgent');else el.classList.remove('urgent');}
+
+function renderQuiz(){
+  quizLock=false;var el=document.getElementById('screen-quiz');var q=quizQ[quizIdx];var tq=quizQ.length;
+  var h='<div class="quiz-top"><div class="quiz-top-left"><button class="btn-back" id="bqq">\u2190</button>';
+  h+='<span class="quiz-progress-text">Soal '+(quizIdx+1)+' / '+tq+'</span></div>';
+  h+='<div style="display:flex;align-items:center;gap:8px">';
+  if(isUjian)h+='<span class="quiz-timer" id="qt">'+fmtT(timeLeft)+'</span>';
+  h+='<span class="quiz-cat-badge" style="background:'+curCat.color+'">';
+  if(isUjian){h+=UJ_SEC[ujSecIdx].name;if(q.level)h+=' Lv.'+q.level;}else h+='Lv.'+curLv;
+  h+='</span></div></div>';
+  h+='<div class="quiz-dots" style="margin-bottom:8px">';
+  var dotCount=tq<=15?tq:10;for(var i=0;i<dotCount;i++){var cls='quiz-dot';if(i<quizIdx)cls+=quizAns[i]?' done':' wrong';else if(i===quizIdx)cls+=' current';h+='<div class="'+cls+'"></div>';}
+  h+='</div><div class="quiz-card" id="qc">';
+  if(q.emojiOnly){h+='<div class="quiz-emoji-area">'+q.question+'</div><div class="quiz-question" style="font-size:1.4rem;">Berapa jumlahnya?</div>';}
+  else if(q.isEmoji&&q.emojiDisplay){h+='<div class="quiz-emoji-area">'+q.emojiDisplay+'</div><div class="quiz-question">'+q.question+' = ?</div>';}
+  else h+='<div class="quiz-question">'+q.question+' = ?</div>';
+  h+='<div class="quiz-input-wrap"><input type="text" class="quiz-input" id="qi" inputmode="numeric" autocomplete="off" placeholder="?"><button class="btn-submit" id="qs">Jawab</button></div>';
+  h+='<div class="quiz-feedback" id="qf"><div class="feedback-icon" id="fi"></div><div class="feedback-text" id="ft"></div><div class="feedback-answer" id="fa"></div></div></div>';
+  el.innerHTML=h;
+  var inp=document.getElementById('qi'),btn=document.getElementById('qs');
+  setTimeout(function(){inp.focus();},150);
+  inp.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');});
+  function sub(){if(quizLock)return;var v=inp.value.trim();if(v==='')return;quizLock=true;var ua=parseInt(v,10),ok=ua===q.answer;quizAns.push(ok);var fb=document.getElementById('qf');
+  if(ok){fb.className='quiz-feedback correct show';document.getElementById('fi').textContent='\u2714';document.getElementById('fi').style.color='var(--success)';document.getElementById('ft').textContent='Benar, '+getName()+'!';document.getElementById('ft').style.color='var(--success)';document.getElementById('fa').textContent='';}
+  else{fb.className='quiz-feedback wrong show anim-shake';document.getElementById('fi').textContent='\u2718';document.getElementById('fi').style.color='var(--danger)';document.getElementById('ft').textContent='Salah, '+getName();document.getElementById('ft').style.color='var(--danger)';document.getElementById('fa').textContent='Jawaban: '+q.answer;}
+  inp.disabled=true;btn.disabled=true;setTimeout(function(){quizIdx++;if(quizIdx<quizQ.length)renderQuiz();else{clrT();showResult();}},1000);}
+  btn.addEventListener('click',sub);inp.addEventListener('keydown',function(e){if(e.key==='Enter')sub();});
+  document.getElementById('bqq').addEventListener('click',function(){clrT();if(isUjian)openUjLevels();else if(curCat)openLevels(curCat.id);});
+  if(isUjian)updTD();
+}
+
+function showResult(){
+  clrT();var cor=0;for(var i=0;i<quizAns.length;i++)if(quizAns[i])cor++;
+  var tq=quizQ.length,pct=Math.round((cor/tq)*100),passed=pct>70;
+  var catId=curCat.id,lv=curLv,p=progress[catId],co=curCat;
+  var lu=false,cd=false;
+  if(passed){
+    if(p.stars[lv]<3)p.stars[lv]++;
+    if(p.stars[lv]>=3&&p.unlocked<=lv&&lv<co.maxLv){p.unlocked=lv+1;lu=true;}
+    if(p.stars[lv]>=3&&lv===co.maxLv)cd=true;
+    saveProg(p);
+    showSaveToast();
+  }
+  var rc=pct>70?'#4CAF50':pct>=50?'#FFA726':'#EF5350';
+  var circ=2*Math.PI*54;
+  var el=document.getElementById('screen-result');
+  var h='<div class="result-wrap"><div class="result-card anim-pop">';
+  h+='<div class="score-ring-wrap"><svg class="score-ring" viewBox="0 0 120 120"><circle class="score-ring-bg" cx="60" cy="60" r="54"/>';
+  h+='<circle class="score-ring-fg" id="rfg" cx="60" cy="60" r="54" stroke="'+rc+'" stroke-dasharray="'+circ+'" stroke-dashoffset="'+circ+'"/></svg>';
+  h+='<div class="score-number"><div class="score-pct" id="sp" style="color:'+rc+'">0%</div><div class="score-label">Skor</div></div></div>';
+  h+='<div class="result-detail">'+cor+' dari '+tq+' benar</div>';
+  if(isUjian){
+    var lm={};for(var i=0;i<quizQ.length;i++){var ql=quizQ[i].level||1;if(!lm[ql])lm[ql]={t:0,c:0};lm[ql].t++;if(quizAns[i])lm[ql].c++;}
+    h+='<div style="text-align:left;margin:12px 0;font-size:.85rem">';
+    var lvs=Object.keys(lm).sort(function(a,b){return a-b;});
+    for(var i=0;i<lvs.length;i++){var lv=lvs[i],d=lm[lv];var lc=d.c>=8?'#4CAF50':d.c>=5?'#FFA726':'#EF5350';
+    h+='<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>Level '+lv+'</span><span style="color:'+lc+';font-weight:700">'+d.c+'/'+d.t+'</span></div>';}
+    h+='</div><div class="result-hint">Waktu: '+fmtT(totalTime-timeLeft)+'</div>';
+  }
+  h+='<div class="star-progress-bar">';for(var s=0;s<3;s++){h+='<div class="star-slot '+(s<p.stars[lv]?'earned':'empty')+'">';h+=s<p.stars[lv]?'\u2605':'\u2606';h+='</div>';}h+='</div>';
+  if(!isUjian){
+    if(p.stars[lv]<3)h+='<div class="result-hint">Kumpulkan 3 bintang (skor >70%) sebanyak '+(3-p.stars[lv])+'x lagi</div>';
+    else if(lu)h+='<div class="result-hint" style="background:#E8F5E9;color:#2E7D32">Level '+(lv+1)+' sudah terbuka!</div>';
+    else if(cd)h+='<div class="result-hint" style="background:#FFF8E1;color:#F57F17">Semua level '+co.name+' selesai!</div>';
+  }
+  var msg='';
+  if(passed){if(isUjian)msg=pkN(MSG_CD)+' Ujian '+UJ_SEC[ujSecIdx].name+' selesai!';else if(p.stars[lv]>=3&&lv<co.maxLv)msg=pkN(MSG_G)+' Kamu sudah 3 bintang!';else if(p.stars[lv]>=3&&lv===co.maxLv)msg=pkN(MSG_CD);else msg=pkN(MSG_G)+' '+(3-p.stars[lv])+' bintang lagi.';}
+  else msg=pkN(MSG_TA)+' Butuh skor >70% untuk bintang.';
+  h+='<div class="result-msg">'+msg+'</div>';
+  h+='<div class="result-btns"><button class="btn btn-primary" id="brt">Latihan Lagi</button><button class="btn btn-secondary" id="btl">Kembali</button></div></div></div>';
+  el.innerHTML=h;sw('screen-result');
+  setTimeout(function(){var r=document.getElementById('rfg');if(r)r.style.strokeDashoffset=circ*(1-pct/100);var pe=document.getElementById('sp');if(pe)animC(pe,0,pct,1000,'%');},150);
+  if(passed)launchConf(50);
+  document.getElementById('brt').addEventListener('click',function(){if(isUjian)startUjian(ujSecIdx);else startQuiz(catId,lv);});
+  document.getElementById('btl').addEventListener('click',function(){
+    if(isUjian){openUjLevels();return;}
+    if(lu)showCeleb('lu',lv,co);else if(cd)showCeleb('cd',lv,co);else openLevels(catId);
+  });
+}
+
+function animC(el,f,t,d,sx){var st=performance.now();sx=sx||'';function step(ts){var p=Math.min((ts-st)/d,1);el.textContent=Math.round(f+(t-f)*(1-Math.pow(1-p,3)))+sx;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+
+function showCeleb(type,lv,co){
+  var ov=document.getElementById('overlay');var h='<div class="celeb-card">';
+  if(type==='lu'){h+='<div class="celeb-trophy" style="background:#FBE9E7"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg></div><div class="celeb-title" style="color:#FF7043">'+pkN(MSG_LU)+'</div><div class="celeb-desc">Kamu naik ke <strong>Level '+(lv+1)+'</strong> di kategori '+co.name+'!</div>';}
+  else{h+='<div class="celeb-trophy" style="background:#FFF8E1"><svg width="44" height="44" viewBox="0 0 24 24" fill="#FFB300" stroke="#F57F17" stroke-width="1"><path d="M5 3h14l-1.5 9h-11zM6.5 12L5 21h14l-1.5-9M9 21h6M10 3V1h4v2"/></svg></div><div class="celeb-title" style="color:#F57F17">'+pkN(MSG_CD)+'</div><div class="celeb-desc">Semua level <strong>'+co.name+'</strong> selesai!</div>';}
+  h+='<button class="btn btn-primary" id="bcc" style="width:100%">Lanjut</button></div>';
+  ov.innerHTML=h;ov.classList.add('show');launchConf(type==='cd'?100:70);
+  document.getElementById('bcc').addEventListener('click',function(){ov.classList.remove('show');var tid=co.id;setTimeout(function(){if(tid==='ujian')openUjLevels();else openLevels(tid);},400);});
+}
+
+function launchConf(n){var c=document.getElementById('confetti');c.innerHTML='';var cols=['#FF7043','#66BB6A','#42A5F5','#AB47BC','#FFA726','#EC407A','#26A69A','#FFD54F','#7E57C2'];for(var i=0;i<n;i++){var p=document.createElement('div');p.className='confetti-p';p.style.left=(Math.random()*100)+'%';p.style.backgroundColor=cols[Math.floor(Math.random()*cols.length)];p.style.width=(Math.random()*8+5)+'px';p.style.height=(Math.random()*12+5)+'px';p.style.borderRadius=Math.random()<.33?'50%':Math.random()<.5?'3px':'0';p.style.animationDelay=(Math.random()*.8)+'s';p.style.animationDuration=(Math.random()*2+2)+'s';p.style.opacity=(Math.random()*.5+.5);c.appendChild(p);}setTimeout(function(){c.innerHTML='';},5000);}
+
+startApp();
+</script>
+</body>
+</html>
