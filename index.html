@@ -504,7 +504,8 @@ try {
 var I18N = {
   id: {
     // Akses
-    access_welcome: 'Selamat datang! Silakan masukkan Nama dan Kode Akses yang diberikan oleh pengembang untuk melanjutkan. <a href="https://lynk.id/qafstudio">Minta akses</a></div>',
+    access_welcome: 'Selamat datang! Silakan masukkan Nama dan Kode Akses yang diberikan oleh pengembang untuk melanjutkan.',
+    access_request: 'Minta Akses',
     access_name_ph: 'Nama Kamu',
     access_code_ph: 'Kode Akses',
     access_btn: 'Buka Aplikasi',
@@ -609,7 +610,8 @@ var I18N = {
   },
   en: {
     // Access
-    access_welcome: 'Welcome! Please enter your Name and Access Code provided by the developer to continue. <a href="https://lynk.id/qafstudio">Request access</a></div>',
+    access_welcome: 'Welcome! Please enter your Name and Access Code provided by the developer to continue.',
+    access_request: 'Request access',
     access_name_ph: 'Your Name',
     access_code_ph: 'Access Code',
     access_btn: 'Open App',
@@ -1111,7 +1113,7 @@ function showAccessScreen() {
   var ov = document.getElementById('overlay');
   var h = '<div class="celeb-card" style="max-width:380px; text-align:center;">';
   h += '<div class="home-title" style="font-size:2rem; margin-bottom:20px; -webkit-text-fill-color: var(--accent); background: none;">MathKu</div>';
-  h += '<div style="font-size:.9rem; color:var(--text-light); margin-bottom:24px;">'+t('access_welcome')+'</div>';
+  h += '<div style="font-size:.9rem; color:var(--text-light); margin-bottom:24px;">'+t('access_welcome')'+ <a href=>'+t('access_request')+'</a></div>';
   h += '<input type="text" id="access-name" class="quiz-input" placeholder="'+t('access_name_ph')+'" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
   h += '<input type="text" id="access-code" class="quiz-input" placeholder="'+t('access_code_ph')+'" inputmode="numeric" maxlength="6" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
   h += '<div id="access-error" style="color:var(--danger); font-size:.85rem; height:18px; margin-bottom:8px;"></div>';
