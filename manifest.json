@@ -1,0 +1,72 @@
+{
+  "name": "MathKu - Belajar Berhitung",
+  "short_name": "MathKu",
+  "description": "Aplikasi belajar berhitung menyenangkan untuk anak Indonesia. Penjumlahan, pengurangan, perkalian, pembagian, dan ujian.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FEF9EF",
+  "theme_color": "#FF7043",
+  "lang": "id",
+  "dir": "ltr",
+  "categories": ["education", "kids", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Penjumlahan",
+      "short_name": "+",
+      "description": "Langsung ke kategori Penjumlahan",
+      "url": "./index.html?cat=penjumlahan"
+    },
+    {
+      "name": "Ujian",
+      "short_name": "🏆",
+      "description": "Langsung ke mode Ujian",
+      "url": "./index.html?cat=ujian"
+    }
+  ]
+}
