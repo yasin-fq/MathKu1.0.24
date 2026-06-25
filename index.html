@@ -260,6 +260,12 @@
   .home-logo{display:inline-flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#FF7043,#EC407A,#AB47BC);box-shadow:0 4px 14px rgba(255,112,67,.3);margin-bottom:10px}
   .home-logo svg{width:34px;height:34px;display:block}
 
+  /* Language toggle button - floating top-right (next to sound) */
+  .lang-toggle{position:fixed;top:14px;right:64px;z-index:350;height:42px;padding:0 14px;border-radius:21px;border:2px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:all .2s;font-family:inherit;font-weight:700;font-size:.8rem;color:var(--text)}
+  .lang-toggle:hover{transform:scale(1.05);border-color:var(--accent);box-shadow:0 4px 14px rgba(255,112,67,.2)}
+  .lang-toggle:active{transform:scale(.96)}
+  .lang-flag{letter-spacing:.5px}
+
   /* Sound toggle button - floating top-right */
   .sound-toggle{position:fixed;top:14px;right:14px;z-index:350;width:42px;height:42px;border-radius:50%;border:2px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:all .2s;font-family:inherit;padding:0}
   .sound-toggle:hover{transform:scale(1.08);border-color:var(--accent);box-shadow:0 4px 14px rgba(255,112,67,.2)}
@@ -317,6 +323,11 @@
   <svg class="sound-off-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
   <span class="sound-pulse"></span>
 </button>
+
+<!-- Tombol toggle bahasa -->
+<button class="lang-toggle" id="lang-toggle" aria-label="Switch language" title="Switch language">
+  <span class="lang-flag" id="lang-flag">ID</span>
+</button>
 <div id="app">
   <div id="screen-home" class="screen"></div>
   <div id="screen-levels" class="screen"></div>
@@ -333,42 +344,42 @@
     <div class="install-head">
       <div class="install-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Pasang MathKu di Perangkat Anda
+        <span id="i18n-install-title">Pasang MathKu di Perangkat Anda</span>
       </div>
       <button class="install-close" id="install-close" aria-label="Tutup">&times;</button>
     </div>
-    <div class="install-intro">Pasang MathKu sebagai aplikasi agar bisa dibuka dengan satu tap, tampil layar penuh, dan tersimpan di layar utama seperti aplikasi biasa.</div>
+    <div class="install-intro" id="i18n-install-intro">Pasang MathKu sebagai aplikasi agar bisa dibuka dengan satu tap, tampil layar penuh, dan tersimpan di layar utama seperti aplikasi biasa.</div>
     <div class="install-tabs">
-      <button class="install-tab active" data-platform="android">Android</button>
-      <button class="install-tab" data-platform="ios">iPhone/iPad</button>
-      <button class="install-tab" data-platform="desktop">Komputer</button>
+      <button class="install-tab active" data-platform="android" id="i18n-tab-android">Android</button>
+      <button class="install-tab" data-platform="ios" id="i18n-tab-ios">iPhone/iPad</button>
+      <button class="install-tab" data-platform="desktop" id="i18n-tab-desktop">Komputer</button>
     </div>
 
     <div class="install-content active" data-platform="android">
-      <div class="install-step"><div class="step-num">1</div><div class="step-text">Buka aplikasi MathKu di browser <strong>Chrome</strong> di HP Android Anda.</div></div>
-      <div class="install-step"><div class="step-num">2</div><div class="step-text">Tap ikon menu <span class="step-hint">&vellip;</span> (tiga titik) di sudut kanan atas browser.</div></div>
-      <div class="install-step"><div class="step-num">3</div><div class="step-text">Pilih menu <strong>"Tambahkan ke Layar Utama"</strong> atau <strong>"Pasang aplikasi"</strong>.</div></div>
-      <div class="install-step"><div class="step-num">4</div><div class="step-text">Tekan tombol <strong>"Pasang"</strong> pada kotak konfirmasi yang muncul.</div></div>
-      <div class="install-step"><div class="step-num">5</div><div class="step-text">Selesai! Ikon MathKu kini muncul di layar utama HP Anda.</div></div>
-      <div class="install-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Progres belajar tetap tersimpan otomatis meskipun aplikasi ditutup.</span></div>
+      <div class="install-step"><div class="step-num">1</div><div class="step-text" id="i18n-and1"></div></div>
+      <div class="install-step"><div class="step-num">2</div><div class="step-text" id="i18n-and2"></div></div>
+      <div class="install-step"><div class="step-num">3</div><div class="step-text" id="i18n-and3"></div></div>
+      <div class="install-step"><div class="step-num">4</div><div class="step-text" id="i18n-and4"></div></div>
+      <div class="install-step"><div class="step-num">5</div><div class="step-text" id="i18n-and5"></div></div>
+      <div class="install-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span id="i18n-and-note"></span></div>
     </div>
 
     <div class="install-content" data-platform="ios">
-      <div class="install-step"><div class="step-num">1</div><div class="step-text">Buka aplikasi MathKu di browser <strong>Safari</strong> di iPhone atau iPad Anda.</div></div>
-      <div class="install-step"><div class="step-num">2</div><div class="step-text">Tap tombol <strong>Share</strong> <span class="step-hint">&#8599;</span> (kotak dengan panah ke atas) di bilah bawah Safari.</div></div>
-      <div class="install-step"><div class="step-num">3</div><div class="step-text">Gulir daftar ke bawah lalu pilih <strong>"Tambah ke Layar Utama"</strong>.</div></div>
-      <div class="install-step"><div class="step-num">4</div><div class="step-text">Tekan <strong>"Tambahkan"</strong> di pojok kanan atas layar.</div></div>
-      <div class="install-step"><div class="step-num">5</div><div class="step-text">Selesai! Ikon MathKu kini muncul di layar utama iPhone/iPad Anda.</div></div>
-      <div class="install-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Wajib gunakan Safari. Browser lain di iOS tidak mendukung PWA.</span></div>
+      <div class="install-step"><div class="step-num">1</div><div class="step-text" id="i18n-ios1"></div></div>
+      <div class="install-step"><div class="step-num">2</div><div class="step-text" id="i18n-ios2"></div></div>
+      <div class="install-step"><div class="step-num">3</div><div class="step-text" id="i18n-ios3"></div></div>
+      <div class="install-step"><div class="step-num">4</div><div class="step-text" id="i18n-ios4"></div></div>
+      <div class="install-step"><div class="step-num">5</div><div class="step-text" id="i18n-ios5"></div></div>
+      <div class="install-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span id="i18n-ios-note"></span></div>
     </div>
 
     <div class="install-content" data-platform="desktop">
-      <div class="install-step"><div class="step-num">1</div><div class="step-text">Buka aplikasi MathKu di browser <strong>Chrome</strong> atau <strong>Edge</strong> di komputer Anda.</div></div>
-      <div class="install-step"><div class="step-num">2</div><div class="step-text">Cari ikon install <span class="step-hint">&#8853;</span> di sisi kanan address bar, lalu klik.</div></div>
-      <div class="install-step"><div class="step-num">3</div><div class="step-text">Jika tidak ada, klik menu <span class="step-hint">&vellip;</span> (tiga titik) &raquo; <strong>"Pasang MathKu"</strong> atau <strong>"Install MathKu"</strong>.</div></div>
-      <div class="install-step"><div class="step-num">4</div><div class="step-text">Klik tombol <strong>"Pasang"</strong> pada dialog konfirmasi.</div></div>
-      <div class="install-step"><div class="step-num">5</div><div class="step-text">Selesai! MathKu terbuka di jendela terpisah dan ikonnya tersedia di desktop/taskbar.</div></div>
-      <div class="install-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Aplikasi terbuka layar penuh tanpa address bar, seperti aplikasi desktop biasa.</span></div>
+      <div class="install-step"><div class="step-num">1</div><div class="step-text" id="i18n-dsk1"></div></div>
+      <div class="install-step"><div class="step-num">2</div><div class="step-text" id="i18n-dsk2"></div></div>
+      <div class="install-step"><div class="step-num">3</div><div class="step-text" id="i18n-dsk3"></div></div>
+      <div class="install-step"><div class="step-num">4</div><div class="step-text" id="i18n-dsk4"></div></div>
+      <div class="install-step"><div class="step-num">5</div><div class="step-text" id="i18n-dsk5"></div></div>
+      <div class="install-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span id="i18n-dsk-note"></span></div>
     </div>
   </div>
 </div>
@@ -473,6 +484,273 @@ var UJ_SEC=[
 ];
 
 var DEV_CODE = "211221"; 
+
+/* ================================================================
+   SISTEM INTERNASIONALISASI (i18n) — Bahasa Indonesia & English
+   ================================================================ */
+var LANG_KEY = 'mathku_lang';
+var currentLang = 'id';
+try {
+  var savedLang = localStorage.getItem(LANG_KEY);
+  if (savedLang === null) { savedLang = getCookie(LANG_KEY); }
+  if (savedLang === 'en' || savedLang === 'id') currentLang = savedLang;
+  // Deteksi bahasa browser jika belum ada preferensi tersimpan
+  if (!savedLang) {
+    var bl = (navigator.language || 'id').toLowerCase();
+    currentLang = bl.indexOf('en') === 0 ? 'en' : 'id';
+  }
+} catch(e) {}
+
+var I18N = {
+  id: {
+    // Akses
+    access_welcome: 'Selamat datang! Silakan masukkan Nama dan Kode Akses yang diberikan oleh pengembang untuk melanjutkan.',
+    access_name_ph: 'Nama Kamu',
+    access_code_ph: 'Kode Akses',
+    access_btn: 'Buka Aplikasi',
+    access_err_name: 'Nama tidak boleh kosong.',
+    access_err_code: 'Kode akses salah!',
+    access_granted_title: 'Akses Diberikan!',
+    access_granted_desc: 'Halo <strong>{name}</strong>, selamat memulai. Mari biasakan berdoa sebelum memulai pelajaran.',
+    access_continue: 'Lanjut',
+    // Home
+    home_subtitle: 'Halo {name}, Belajar Berhitung Jadi Menyenangkan',
+    home_install_btn: 'Pasang Aplikasi',
+    home_save_indicator: '\u2713 Progres tersimpan otomatis',
+    home_ujian_count: '7 kategori ujian',
+    home_all_done: 'Semua level selesai',
+    home_reset_btn: 'Reset Semua Progress',
+    home_reset_confirm: 'Yakin hapus semua progress?',
+    home_reset_yes: 'Hapus',
+    home_reset_no: 'Batal',
+    home_footer: '© 2026 MathKu 1.0.25 (Beta) · PWA Edition | Hak Cipta Dilindungi.<br>Dibuat dengan ❤️ untuk pendidikan anak Indonesia.',
+    // Level page
+    level_desc: 'Skor >70% untuk bintang. 3 bintang untuk naik level.',
+    ujian_level_desc: 'Kuis dari semua level setiap kategori \u2022 10 soal \u2022 Waktu berbeda per kategori',
+    // Quiz
+    quiz_prepare: 'Persiapan Ujian',
+    quiz_exam_title: 'Ujian: {name}',
+    quiz_exam_time: '<strong>\u23F1 Waktu Ujian:</strong> Kamu punya waktu <strong>{time} menit</strong> untuk mengerjakan 10 soal. Kerjakan dengan cepat tapi teliti!',
+    quiz_exam_pray: '<strong>"Ya Allah, berkahilah ilmu yang kau berikan padaku."',
+    quiz_exam_start: 'Ujian dimulai dalam:',
+    quiz_countdown_go: 'Mulai!',
+    quiz_question: 'Soal {n} / {total}',
+    quiz_count_emoji: 'Berapa jumlahnya?',
+    quiz_input_placeholder: '?',
+    quiz_submit: 'Jawab',
+    quiz_correct: 'Benar, {name}!',
+    quiz_wrong: 'Salah, {name}',
+    quiz_answer: 'Jawaban: {ans}',
+    // Result
+    result_score_label: 'Skor',
+    result_correct_count: '{cor} dari {total} benar',
+    result_level: 'Level {lv}',
+    result_time: 'Waktu: {time}',
+    result_stars_hint: 'Kumpulkan 3 bintang (skor >70%) sebanyak {n}x lagi',
+    result_level_unlocked: 'Level {lv} sudah terbuka!',
+    result_cat_done: 'Semua level {name} selesai!',
+    result_msg_3stars: 'Kamu sudah 3 bintang!',
+    result_msg_stars_left: ' {n} bintang lagi.',
+    result_msg_exam_done: ' Ujian {name} selesai!',
+    result_msg_need_score: ' Butuh skor >70% untuk bintang.',
+    result_retry: 'Latihan Lagi',
+    result_back: 'Kembali',
+    // Celebration
+    celeb_level_up: 'Kamu naik ke <strong>Level {lv}</strong> di kategori {name}!',
+    celeb_cat_done: 'Semua level <strong>{name}</strong> selesai!',
+    celeb_continue: 'Lanjut',
+    // Toast
+    toast_saved: 'Progres tersimpan',
+    toast_installed: 'MathKu terpasang! Cari di layar utama.',
+    toast_install_success: 'MathKu berhasil dipasang!',
+    // Modal install
+    install_title: 'Pasang MathKu di Perangkat Anda',
+    install_intro: 'Pasang MathKu sebagai aplikasi agar bisa dibuka dengan satu tap, tampil layar penuh, dan tersimpan di layar utama seperti aplikasi biasa.',
+    install_close: 'Tutup',
+    install_tab_android: 'Android',
+    install_tab_ios: 'iPhone/iPad',
+    install_tab_desktop: 'Komputer',
+    // Android steps
+    and_step1: 'Buka aplikasi MathKu di browser <strong>Chrome</strong> di HP Android Anda.',
+    and_step2: 'Tap ikon menu <span class="step-hint">&vellip;</span> (tiga titik) di sudut kanan atas browser.',
+    and_step3: 'Pilih menu <strong>"Tambahkan ke Layar Utama"</strong> atau <strong>"Pasang aplikasi"</strong>.',
+    and_step4: 'Tekan tombol <strong>"Pasang"</strong> pada kotak konfirmasi yang muncul.',
+    and_step5: 'Selesai! Ikon MathKu kini muncul di layar utama HP Anda.',
+    and_note: 'Progres belajar tetap tersimpan otomatis meskipun aplikasi ditutup.',
+    // iOS steps
+    ios_step1: 'Buka aplikasi MathKu di browser <strong>Safari</strong> di iPhone atau iPad Anda.',
+    ios_step2: 'Tap tombol <strong>Share</strong> <span class="step-hint">&#8599;</span> (kotak dengan panah ke atas) di bilah bawah Safari.',
+    ios_step3: 'Gulir daftar ke bawah lalu pilih <strong>"Tambah ke Layar Utama"</strong>.',
+    ios_step4: 'Tekan <strong>"Tambahkan"</strong> di pojok kanan atas layar.',
+    ios_step5: 'Selesai! Ikon MathKu kini muncul di layar utama iPhone/iPad Anda.',
+    ios_note: 'Wajib gunakan Safari. Browser lain di iOS tidak mendukung PWA.',
+    // Desktop steps
+    dsk_step1: 'Buka aplikasi MathKu di browser <strong>Chrome</strong> atau <strong>Edge</strong> di komputer Anda.',
+    dsk_step2: 'Cari ikon install <span class="step-hint">&#8853;</span> di sisi kanan address bar, lalu klik.',
+    dsk_step3: 'Jika tidak ada, klik menu <span class="step-hint">&vellip;</span> (tiga titik) &raquo; <strong>"Pasang MathKu"</strong> atau <strong>"Install MathKu"</strong>.',
+    dsk_step4: 'Klik tombol <strong>"Pasang"</strong> pada dialog konfirmasi.',
+    dsk_step5: 'Selesai! MathKu terbuka di jendela terpisah dan ikonnya tersedia di desktop/taskbar.',
+    dsk_note: 'Aplikasi terbuka layar penuh tanpa address bar, seperti aplikasi desktop biasa.',
+    // Category names
+    cat_mencacah: 'Mencacah',
+    cat_penjumlahan: 'Penjumlahan',
+    cat_pengurangan: 'Pengurangan',
+    cat_jumlah_kurang: 'Jumlah & Kurang',
+    cat_perkalian: 'Perkalian',
+    cat_pembagian: 'Pembagian',
+    cat_kali_bagi: 'Kali & Bagi',
+    cat_advance: 'Advance',
+    cat_ujian: 'Ujian',
+    // Motivasi
+    msg_lu: ['Luar biasa, {nama}!','Hebat sekali, {nama}!','Kamu menakjubkan, {nama}!','Fantastis, {nama}!','Keren banget, {nama}!'],
+    msg_cd: ['Juara Matematika, {nama}!','Master sejati, {nama}!','Luar biasa hebat, {nama}!','Luar biasa pintar, {nama}!'],
+    msg_g: ['Bagus sekali, {nama}!','Kerja kerasmu membuahkan hasil, {nama}!','Terus semangat, {nama}!','Hampir sampai, {nama}!'],
+    msg_ta: ['Jangan menyerah, {nama}!','Kamu pasti bisa, {nama}!','Terus berlatih ya, {nama}!','Semangat terus, {nama}!']
+  },
+  en: {
+    // Access
+    access_welcome: 'Welcome! Please enter your Name and Access Code provided by the developer to continue.',
+    access_name_ph: 'Your Name',
+    access_code_ph: 'Access Code',
+    access_btn: 'Open App',
+    access_err_name: 'Name cannot be empty.',
+    access_err_code: 'Wrong access code!',
+    access_granted_title: 'Access Granted!',
+    access_granted_desc: 'Hello <strong>{name}</strong>, welcome aboard. Let\u2019s make a habit of praying before starting the lesson.',
+    access_continue: 'Continue',
+    // Home
+    home_subtitle: 'Hi {name}, Learning Math Becomes Fun',
+    home_install_btn: 'Install App',
+    home_save_indicator: '\u2713 Progress auto-saved',
+    home_ujian_count: '7 exam categories',
+    home_all_done: 'All levels completed',
+    home_reset_btn: 'Reset All Progress',
+    home_reset_confirm: 'Sure to delete all progress?',
+    home_reset_yes: 'Delete',
+    home_reset_no: 'Cancel',
+    home_footer: '© 2026 MathKu 1.0.25 (Beta) · PWA Edition | All Rights Reserved.<br>Made with ❤️ for Indonesian children\u2019s education.',
+    // Level page
+    level_desc: 'Score >70% for a star. 3 stars to unlock next level.',
+    ujian_level_desc: 'Quiz from all levels of each category \u2022 10 questions \u2022 Different time per category',
+    // Quiz
+    quiz_prepare: 'Exam Preparation',
+    quiz_exam_title: 'Exam: {name}',
+    quiz_exam_time: '<strong>\u23F1 Exam Time:</strong> You have <strong>{time} minutes</strong> to complete 10 questions. Work quickly but carefully!',
+    quiz_exam_pray: '<strong>"O Allah, bless the knowledge You have given me."',
+    quiz_exam_start: 'Exam starts in:',
+    quiz_countdown_go: 'Go!',
+    quiz_question: 'Question {n} / {total}',
+    quiz_count_emoji: 'How many are there?',
+    quiz_input_placeholder: '?',
+    quiz_submit: 'Answer',
+    quiz_correct: 'Correct, {name}!',
+    quiz_wrong: 'Wrong, {name}',
+    quiz_answer: 'Answer: {ans}',
+    // Result
+    result_score_label: 'Score',
+    result_correct_count: '{cor} of {total} correct',
+    result_level: 'Level {lv}',
+    result_time: 'Time: {time}',
+    result_stars_hint: 'Collect 3 stars (score >70%) {n} more time(s)',
+    result_level_unlocked: 'Level {lv} is unlocked!',
+    result_cat_done: 'All {name} levels completed!',
+    result_msg_3stars: 'You got 3 stars!',
+    result_msg_stars_left: ' {n} more star(s) to go.',
+    result_msg_exam_done: ' Exam {name} completed!',
+    result_msg_need_score: ' Need score >70% for a star.',
+    result_retry: 'Practice Again',
+    result_back: 'Back',
+    // Celebration
+    celeb_level_up: 'You advanced to <strong>Level {lv}</strong> in {name}!',
+    celeb_cat_done: 'All <strong>{name}</strong> levels completed!',
+    celeb_continue: 'Continue',
+    // Toast
+    toast_saved: 'Progress saved',
+    toast_installed: 'MathKu installed! Find it on your home screen.',
+    toast_install_success: 'MathKu successfully installed!',
+    // Modal install
+    install_title: 'Install MathKu on Your Device',
+    install_intro: 'Install MathKu as an app so you can open it with one tap, view it full screen, and have it saved on your home screen like a regular app.',
+    install_close: 'Close',
+    install_tab_android: 'Android',
+    install_tab_ios: 'iPhone/iPad',
+    install_tab_desktop: 'Computer',
+    // Android steps
+    and_step1: 'Open the MathKu app in the <strong>Chrome</strong> browser on your Android phone.',
+    and_step2: 'Tap the menu icon <span class="step-hint">&vellip;</span> (three dots) in the top right corner of the browser.',
+    and_step3: 'Select <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.',
+    and_step4: 'Press the <strong>"Install"</strong> button in the confirmation box that appears.',
+    and_step5: 'Done! The MathKu icon now appears on your phone\u2019s home screen.',
+    and_note: 'Learning progress is still auto-saved even when the app is closed.',
+    // iOS steps
+    ios_step1: 'Open the MathKu app in the <strong>Safari</strong> browser on your iPhone or iPad.',
+    ios_step2: 'Tap the <strong>Share</strong> button <span class="step-hint">&#8599;</span> (box with up arrow) in Safari\u2019s bottom bar.',
+    ios_step3: 'Scroll down the list and select <strong>"Add to Home Screen"</strong>.',
+    ios_step4: 'Press <strong>"Add"</strong> in the top right corner of the screen.',
+    ios_step5: 'Done! The MathKu icon now appears on your iPhone/iPad home screen.',
+    ios_note: 'Safari is required. Other browsers on iOS do not support PWA.',
+    // Desktop steps
+    dsk_step1: 'Open the MathKu app in <strong>Chrome</strong> or <strong>Edge</strong> browser on your computer.',
+    dsk_step2: 'Find the install icon <span class="step-hint">&#8853;</span> on the right side of the address bar, then click it.',
+    dsk_step3: 'If not present, click the menu <span class="step-hint">&vellip;</span> (three dots) &raquo; <strong>"Install MathKu"</strong>.',
+    dsk_step4: 'Click the <strong>"Install"</strong> button in the confirmation dialog.',
+    dsk_step5: 'Done! MathKu opens in a separate window and its icon is available on desktop/taskbar.',
+    dsk_note: 'The app opens full screen without an address bar, like a regular desktop app.',
+    // Category names
+    cat_mencacah: 'Counting',
+    cat_penjumlahan: 'Addition',
+    cat_pengurangan: 'Subtraction',
+    cat_jumlah_kurang: 'Add & Subtract',
+    cat_perkalian: 'Multiplication',
+    cat_pembagian: 'Division',
+    cat_kali_bagi: 'Multiply & Divide',
+    cat_advance: 'Advanced',
+    cat_ujian: 'Exam',
+    // Motivasi
+    msg_lu: ['Amazing, {nama}!','Great job, {nama}!','You\u2019re incredible, {nama}!','Fantastic, {nama}!','Awesome, {nama}!'],
+    msg_cd: ['Math Champion, {nama}!','True Master, {nama}!','Outstanding, {nama}!','Brilliant, {nama}!'],
+    msg_g: ['Well done, {nama}!','Your hard work paid off, {nama}!','Keep it up, {nama}!','Almost there, {nama}!'],
+    msg_ta: ['Don\u2019t give up, {nama}!','You can do it, {nama}!','Keep practicing, {nama}!','Stay spirited, {nama}!']
+  }
+};
+
+// Helper: terjemahkan key, support placeholder {var}
+function t(key, vars) {
+  var dict = I18N[currentLang] || I18N.id;
+  var s = dict[key];
+  if (s === undefined) s = I18N.id[key];
+  if (s === undefined) return key;
+  if (vars) {
+    for (var k in vars) {
+      if (vars.hasOwnProperty(k)) {
+        s = s.replace(new RegExp('\\{' + k + '\\}', 'g'), vars[k]);
+      }
+    }
+  }
+  return s;
+}
+
+// Helper: terjemahkan nama kategori
+function tCat(id) {
+  return t('cat_' + id);
+}
+
+// Helper: ambil array motivasi sesuai bahasa
+function tMsgArr(key) {
+  return I18N[currentLang][key] || I18N.id[key];
+}
+
+function setLang(lang) {
+  if (lang !== 'id' && lang !== 'en') return;
+  currentLang = lang;
+  try { localStorage.setItem(LANG_KEY, lang); } catch(e) {}
+  try { setCookie(LANG_KEY, lang, 365); } catch(e) {}
+  // Update flag button
+  var flag = document.getElementById('lang-flag');
+  if (flag) flag.textContent = lang === 'id' ? 'ID' : 'EN';
+  // Update html lang attribute
+  document.documentElement.lang = lang;
+}
 
 /* ================================================================
    SOUND ENGINE — Web Audio API (melodi original, lisensi terbuka)
@@ -679,6 +957,7 @@ var SoundEngine = (function() {
 // Fungsi pembantu global
 function snd(name) { SoundEngine.play(name); }
 
+var MSG_LU=[],MSG_CD=[],MSG_G=[],MSG_TA=[]; // Legacy placeholders - sekarang via tMsgArr()
 var FRUIT_E=['\uD83C\uDF4E','\uD83C\uDF4A','\uD83C\uDF4B','\uD83C\uDF4C','\uD83C\uDF47','\uD83C\uDF49','\uD83C\uDF53','\uD83C\uDF45','\uD83C\uDF46','\uD83C\uDF3D'];
 var ANIMAL_E=['\uD83D\uDC36','\uD83D\uDC31','\uD83D\uDC30','\uD83D\uDC39','\uD83D\uDC38','\uD83D\uDC2F','\uD83D\uDC37','\uD83D\uDC35','\uD83D\uDC34','\uD83D\uDC3B'];
 var MSG_LU=['Luar biasa, {nama}!','Hebat sekali, {nama}!','Kamu menakjubkan, {nama}!','Fantastis, {nama}!','Keren banget, {nama}!'];
@@ -697,8 +976,10 @@ var progress = loadProg();
 
 function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
 function pk(a){return a[ri(0,a.length-1)];}
-function getName() { return progress.userName || "Kamu"; }
+function getName() { return progress.userName || (currentLang === 'en' ? 'You' : 'Kamu'); }
 function pkN(arr) { return pk(arr).replace(/{nama}/g, getName()); }
+// Helper baru: ambil pesan motivasi sesuai bahasa aktif
+function pkMsg(key) { return pk(tMsgArr(key)).replace(/{nama}/g, getName()); }
 function comp(a,op,b){if(op==='+')return a+b;if(op==='\u2212'||op==='-')return a-b;if(op==='\u00D7'||op==='*')return a*b;if(op==='\u00F7'||op==='/')return b!==0?a/b:NaN;return NaN;}
 function isPI(n){return typeof n==='number'&&isFinite(n)&&n>0&&Number.isInteger(n);}
 function sg(fn,mt){mt=mt||200;for(var i=0;i<mt;i++){try{var r=fn();if(r&&typeof r.answer==='number'&&isPI(r.answer)&&r.question)return r;}catch(e){}}return{question:'1 + 1',answer:2};}
@@ -830,11 +1111,11 @@ function showAccessScreen() {
   var ov = document.getElementById('overlay');
   var h = '<div class="celeb-card" style="max-width:380px; text-align:center;">';
   h += '<div class="home-title" style="font-size:2rem; margin-bottom:20px; -webkit-text-fill-color: var(--accent); background: none;">MathKu</div>';
-  h += '<div style="font-size:.9rem; color:var(--text-light); margin-bottom:24px;">Selamat datang! Silakan masukkan Nama dan Kode Akses yang diberikan oleh pengembang untuk melanjutkan. <a href="https://lynk.id/qafstudio">Minta akses</a></div>';
-  h += '<input type="text" id="access-name" class="quiz-input" placeholder="Nama Kamu" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
-  h += '<input type="text" id="access-code" class="quiz-input" placeholder="Kode Akses" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
+  h += '<div style="font-size:.9rem; color:var(--text-light); margin-bottom:24px;">'+t('access_welcome')+'</div>';
+  h += '<input type="text" id="access-name" class="quiz-input" placeholder="'+t('access_name_ph')+'" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
+  h += '<input type="text" id="access-code" class="quiz-input" placeholder="'+t('access_code_ph')+'" inputmode="numeric" maxlength="6" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
   h += '<div id="access-error" style="color:var(--danger); font-size:.85rem; height:18px; margin-bottom:8px;"></div>';
-  h += '<button class="btn btn-primary" id="access-btn" style="width:100%; max-width:280px;">Buka Aplikasi</button>';
+  h += '<button class="btn btn-primary" id="access-btn" style="width:100%; max-width:280px;">'+t('access_btn')+'</button>';
   h += '</div>';
   ov.innerHTML = h;
   ov.classList.add('show');
@@ -844,11 +1125,11 @@ function showAccessScreen() {
     var code = document.getElementById('access-code').value.trim();
 
     if (!name) {
-      document.getElementById('access-error').textContent = 'Nama tidak boleh kosong.';
+      document.getElementById('access-error').textContent = t('access_err_name');
       return;
     }
     if (code !== DEV_CODE) {
-      document.getElementById('access-error').textContent = 'Kode akses salah!';
+      document.getElementById('access-error').textContent = t('access_err_code');
       document.getElementById('access-code').classList.add('anim-shake');
       setTimeout(function(){ document.getElementById('access-code').classList.remove('anim-shake'); }, 400);
       return;
@@ -863,9 +1144,9 @@ function showAccessScreen() {
 
     ov.innerHTML = '<div class="celeb-card" style="max-width:380px; text-align:center;">' +
                    '<div class="celeb-trophy" style="background:#E8F5E9"><svg width="40" height="40" viewBox="0 0 24 24" fill="#4CAF50"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>' +
-                   '<div class="celeb-title" style="color:#4CAF50">Akses Diberikan!</div>' +
-                   '<div class="celeb-desc">Halo <strong>'+name+'</strong>, selamat memulai. Mari biasakan berdoa sebelum memulai pelajaran.</div>' +
-                   '<button class="btn btn-primary" id="access-continue" style="width:100%">Lanjut</button></div>';
+                   '<div class="celeb-title" style="color:#4CAF50">'+t('access_granted_title')+'</div>' +
+                   '<div class="celeb-desc">'+t('access_granted_desc',{name:name})+'</div>' +
+                   '<button class="btn btn-primary" id="access-continue" style="width:100%">'+t('access_continue')+'</button></div>';
 
     document.getElementById('access-continue').addEventListener('click', function() {
       ov.classList.remove('show');
@@ -878,7 +1159,7 @@ function renderHome(){
   var el=document.getElementById('screen-home');
   // Sambutan ringan saat tiba di home (jika baru saja login)
   if(!renderHome._welcomed){renderHome._welcomed=true;setTimeout(function(){snd('welcome');},300);}
-  var h='<header class="home-header"><div class="home-logo"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hl" x1="0%25" y1="0%25" x2="100%25" y2="100%25"><stop offset="0%25" stop-color="#FFFFFF"/><stop offset="100%25" stop-color="#FFE0B2"/></linearGradient></defs><text x="32" y="44" font-family="Arial,sans-serif" font-size="28" font-weight="900" text-anchor="middle" fill="url(#hl)">1+2</text></svg></div><div class="home-title">MathKu</div><div class="home-subtitle">Halo '+getName()+', Belajar Berhitung Jadi Menyenangkan</div><button class="btn-install" id="btn-install"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Pasang Aplikasi</button><div class="save-indicator" id="save-ind">\u2713 Progres tersimpan otomatis</div></header><div class="cat-grid">';
+  var h='<header class="home-header"><div class="home-logo"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hl" x1="0%25" y1="0%25" x2="100%25" y2="100%25"><stop offset="0%25" stop-color="#FFFFFF"/><stop offset="100%25" stop-color="#FFE0B2"/></linearGradient></defs><text x="32" y="44" font-family="Arial,sans-serif" font-size="28" font-weight="900" text-anchor="middle" fill="url(#hl)">1+2</text></svg></div><div class="home-title">MathKu</div><div class="home-subtitle">'+t('home_subtitle',{name:getName()})+'</div><button class="btn-install" id="btn-install"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'+t('home_install_btn')+'</button><div class="save-indicator" id="save-ind">'+t('home_save_indicator')+'</div></header><div class="cat-grid">';
   for(var i=0;i<CATS.length;i++){
     var c=CATS[i],p=progress[c.id],ts=0;
     for(var j=1;j<=c.maxLv;j++)ts+=Math.min(p.stars[j],3);
@@ -887,13 +1168,13 @@ function renderHome(){
     var ic=c.isEmoji?'cat-icon cat-icon-emoji':'cat-icon';
     h+='<div class="cat-card'+(done?' completed':'')+'" data-cat="'+c.id+'">';
     h+='<div class="'+ic+'" style="background:'+c.color+'">'+c.icon+'</div>';
-    h+='<div class="cat-name">'+c.name+'</div>';
-    if(c.id==='ujian')h+='<div class="cat-progress">7 kategori ujian</div>';
-    else if(done)h+='<div class="cat-progress">Semua level selesai</div>';
-    else h+='<div class="cat-progress">Level '+p.unlocked+' / '+c.maxLv+'</div>';
+    h+='<div class="cat-name">'+tCat(c.id)+'</div>';
+    if(c.id==='ujian')h+='<div class="cat-progress">'+t('home_ujian_count')+'</div>';
+    else if(done)h+='<div class="cat-progress">'+t('home_all_done')+'</div>';
+    else h+='<div class="cat-progress">'+t('result_level',{lv:p.unlocked})+' / '+c.maxLv+'</div>';
     h+='<div class="cat-bar"><div class="cat-bar-fill" style="width:'+pct+'%;background:'+c.color+'"></div></div></div>';
   }
-  h+='</div><footer class="home-footer"><button class="btn-reset" id="btn-reset">Reset Semua Progress</button><div id="reset-area"></div><div style="margin-top: 20px; font-size: 0.7rem; color: var(--text-light); text-align: center; line-height: 1.5; opacity: 0.8;">© 2026 Mathku 1.0.24 (Beta) | Hak Cipta Dilindungi.<br>Dibuat dengan ❤️ untuk pendidikan anak Indonesia.</div></footer>';
+  h+='</div><footer class="home-footer"><button class="btn-reset" id="btn-reset">'+t('home_reset_btn')+'</button><div id="reset-area"></div><div style="margin-top: 20px; font-size: 0.7rem; color: var(--text-light); text-align: center; line-height: 1.5; opacity: 0.8;">'+t('home_footer')+'</div></footer>';
   el.innerHTML=h;
   var cards=el.querySelectorAll('.cat-card');
   for(var i=0;i<cards.length;i++){(function(cd){cd.addEventListener('click',function(){var id=cd.getAttribute('data-cat');if(id==='ujian')openUjLevels();else openLevels(id);});})(cards[i]);}
@@ -911,7 +1192,7 @@ function renderHome(){
         if(choice.outcome === 'accepted'){
           // Tampilkan toast sukses
           var toast = document.getElementById('save-toast');
-          if(toast){toast.textContent='MathKu terpasang! Cari di layar utama.';toast.classList.add('show');setTimeout(function(){toast.classList.remove('show');toast.textContent='Progres tersimpan';},3000);}
+          if(toast){toast.textContent=t('toast_installed');toast.classList.add('show');setTimeout(function(){toast.classList.remove('show');toast.textContent=t('toast_saved');},3000);}
         }
       }).catch(function(e){console.warn('[PWA] Install prompt error:', e);});
     } else {
@@ -921,7 +1202,7 @@ function renderHome(){
     }
   });
   document.getElementById('btn-reset').addEventListener('click',function(){
-    document.getElementById('reset-area').innerHTML='<div class="reset-confirm"><span>Yakin hapus semua progress?</span><button id="ry">Hapus</button><button class="btn-cancel" id="rn">Batal</button></div>';
+    document.getElementById('reset-area').innerHTML='<div class="reset-confirm"><span>'+t('home_reset_confirm')+'</span><button id="ry">'+t('home_reset_yes')+'</button><button class="btn-cancel" id="rn">'+t('home_reset_no')+'</button></div>';
     document.getElementById('ry').addEventListener('click',function(){
       var name = progress.userName;
       var access = progress.accessGranted;
@@ -940,8 +1221,8 @@ function openLevels(catId){
   var co=null;for(var i=0;i<CATS.length;i++){if(CATS[i].id===catId){co=CATS[i];break;}}if(!co)return;
   curCat=co;var el=document.getElementById('screen-levels'),p=progress[catId];
   var h='<div class="level-header"><button class="btn-back" id="bbl">\u2190</button>';
-  h+='<div class="level-title" style="color:'+co.color+'">'+co.name+'</div></div>';
-  h+='<div class="level-desc">Skor >70% untuk bintang. 3 bintang untuk naik level.</div><div class="level-grid">';
+  h+='<div class="level-title" style="color:'+co.color+'">'+tCat(catId)+'</div></div>';
+  h+='<div class="level-desc">'+t('level_desc')+'</div><div class="level-grid">';
   for(var i=1;i<=co.maxLv;i++){
     var ul=i<=p.unlocked,st=p.stars[i]||0,ic=i===p.unlocked&&st<3;
     var cls='level-node'+(ul?'':' locked')+(ic?' current':'');
@@ -959,15 +1240,15 @@ function openUjLevels(){
   var co=null;for(var i=0;i<CATS.length;i++){if(CATS[i].id==='ujian'){co=CATS[i];break;}}
   curCat=co;var el=document.getElementById('screen-levels'),p=progress['ujian'];
   var h='<div class="level-header"><button class="btn-back" id="bbl">\u2190</button>';
-  h+='<div class="level-title" style="color:'+co.color+'">'+co.name+'</div></div>';
-  h+='<div class="level-desc">Kuis dari semua level setiap kategori \u2022 10 soal \u2022 Waktu berbeda per kategori</div>';
+  h+='<div class="level-title" style="color:'+co.color+'">'+tCat('ujian')+'</div></div>';
+  h+='<div class="level-desc">'+t('ujian_level_desc')+'</div>';
   h+='<div class="level-grid" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr))">';
   for(var i=0;i<UJ_SEC.length;i++){
     var sec=UJ_SEC[i],st=p.stars[i+1]||0;
     h+='<div class="level-node'+(st>=3?' current':'')+'" data-ujidx="'+i+'">';
     h+='<div class="level-circle" style="background:'+sec.color+'">'+(i+1)+'</div>';
     h+='<div class="level-stars">';for(var s=0;s<3;s++)h+=s<st?'\u2605':'\u2606';h+='</div>';
-    h+='<div class="level-label" style="color:'+sec.color+';font-weight:600">'+sec.name+' ('+sec.time+'m)</div></div>';
+    h+='<div class="level-label" style="color:'+sec.color+';font-weight:600">'+tCat(sec.id)+' ('+sec.time+'m)</div></div>';
   }
   h+='</div>';el.innerHTML=h;sw('screen-levels');
   document.getElementById('bbl').addEventListener('click',function(){renderHome();});
@@ -996,17 +1277,18 @@ function showExamIntro(si){
   if(examIntroIntv) clearInterval(examIntroIntv);
   var sec = UJ_SEC[si];
   var el = document.getElementById('screen-quiz');
+  var secName = tCat(sec.id);
   
   var h = '<div class="quiz-top"><div class="quiz-top-left"><button class="btn-back" id="bqq">\u2190</button>';
-  h+='<span class="quiz-progress-text">Persiapan Ujian</span></div></div>';
+  h+='<span class="quiz-progress-text">'+t('quiz_prepare')+'</span></div></div>';
   h+='<div class="quiz-card" style="text-align:center; justify-content:center;">';
   h+='<div style="font-size:2.5rem; margin-bottom:10px;">\uD83D\uDCDD</div>';
-  h+='<div class="result-msg" style="margin-bottom:16px; font-size:1.3rem;">Ujian: '+sec.name+'</div>';
+  h+='<div class="result-msg" style="margin-bottom:16px; font-size:1.3rem;">'+t('quiz_exam_title',{name:secName})+'</div>';
   h+='<div style="text-align:left; background:var(--bg-alt); padding:16px; border-radius:12px; max-width:340px; margin-bottom:20px; font-size:.9rem; line-height:1.6;">';
-  h+='<p style="margin-bottom:10px;"><strong>\u23F1 Waktu Ujian:</strong> Kamu punya waktu <strong>'+sec.time+' menit</strong> untuk mengerjakan 10 soal. Kerjakan dengan cepat tapi teliti!</p>';
-  h+='<p style="margin-bottom:0;"><strong>"Ya Allah, berkahilah ilmu yang kau berikan padaku."</p>';
+  h+='<p style="margin-bottom:10px;">'+t('quiz_exam_time',{time:sec.time})+'</p>';
+  h+='<p style="margin-bottom:0;">'+t('quiz_exam_pray')+'</p>';
   h+='</div>';
-  h+='<div style="font-size:.95rem; color:var(--text-light); margin-bottom:4px;">Ujian dimulai dalam:</div>';
+  h+='<div style="font-size:.95rem; color:var(--text-light); margin-bottom:4px;">'+t('quiz_exam_start')+'</div>';
   h+='<div id="countdown-timer" class="anim-pop" style="font-size:4rem; font-weight:900; color:var(--accent); margin:0;">5</div>';
   h+='</div>';
   el.innerHTML = h;
@@ -1030,7 +1312,7 @@ function showExamIntro(si){
       // Bunyi tick setiap detik countdown (5,4,3,2,1)
       snd('tick');
     } else if (cd === 0) {
-      cdEl.textContent = "Mulai!";
+      cdEl.textContent = t('quiz_countdown_go');
       cdEl.style.color = "var(--success)";
       cdEl.classList.remove('anim-pop');
       void cdEl.offsetWidth;
@@ -1052,27 +1334,27 @@ function updTD(){var el=document.getElementById('qt');if(!el)return;el.textConte
 function renderQuiz(){
   quizLock=false;var el=document.getElementById('screen-quiz');var q=quizQ[quizIdx];var tq=quizQ.length;
   var h='<div class="quiz-top"><div class="quiz-top-left"><button class="btn-back" id="bqq">\u2190</button>';
-  h+='<span class="quiz-progress-text">Soal '+(quizIdx+1)+' / '+tq+'</span></div>';
+  h+='<span class="quiz-progress-text">'+t('quiz_question',{n:(quizIdx+1),total:tq})+'</span></div>';
   h+='<div style="display:flex;align-items:center;gap:8px">';
   if(isUjian)h+='<span class="quiz-timer" id="qt">'+fmtT(timeLeft)+'</span>';
   h+='<span class="quiz-cat-badge" style="background:'+curCat.color+'">';
-  if(isUjian){h+=UJ_SEC[ujSecIdx].name;if(q.level)h+=' Lv.'+q.level;}else h+='Lv.'+curLv;
+  if(isUjian){h+=tCat(UJ_SEC[ujSecIdx].id);if(q.level)h+=' Lv.'+q.level;}else h+='Lv.'+curLv;
   h+='</span></div></div>';
   h+='<div class="quiz-dots" style="margin-bottom:8px">';
-  var dotCount=tq<=15?tq:10;for(var i=0;i<dotCount;i++){var cls='quiz-dot';if(i<quizIdx)cls+=quizAns[i]?' done':' wrong';else if(i===quizIdx)cls+=' current';h+='<div class="'+cls+'"></div>';}
+  var dotCount=tq<=15?tq:10;for(var i=0;i<dotCount;i++){var cls='quiz-dot';if(i<quizIdx)cls+=quizAns[i]?' done':' wrong';else if(i===quizIdx)cls+=' current';h+='<div class="'+cls+'"></div>';} 
   h+='</div><div class="quiz-card" id="qc">';
-  if(q.emojiOnly){h+='<div class="quiz-emoji-area">'+q.question+'</div><div class="quiz-question" style="font-size:1.4rem;">Berapa jumlahnya?</div>';}
+  if(q.emojiOnly){h+='<div class="quiz-emoji-area">'+q.question+'</div><div class="quiz-question" style="font-size:1.4rem;">'+t('quiz_count_emoji')+'</div>';}
   else if(q.isEmoji&&q.emojiDisplay){h+='<div class="quiz-emoji-area">'+q.emojiDisplay+'</div><div class="quiz-question">'+q.question+' = ?</div>';}
   else h+='<div class="quiz-question">'+q.question+' = ?</div>';
-  h+='<div class="quiz-input-wrap"><input type="text" class="quiz-input" id="qi" inputmode="numeric" autocomplete="off" placeholder="?"><button class="btn-submit" id="qs">Jawab</button></div>';
+  h+='<div class="quiz-input-wrap"><input type="text" class="quiz-input" id="qi" inputmode="numeric" autocomplete="off" placeholder="'+t('quiz_input_placeholder')+'"><button class="btn-submit" id="qs">'+t('quiz_submit')+'</button></div>';
   h+='<div class="quiz-feedback" id="qf"><div class="feedback-icon" id="fi"></div><div class="feedback-text" id="ft"></div><div class="feedback-answer" id="fa"></div></div></div>';
   el.innerHTML=h;
   var inp=document.getElementById('qi'),btn=document.getElementById('qs');
   setTimeout(function(){inp.focus();},150);
   inp.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');});
   function sub(){if(quizLock)return;var v=inp.value.trim();if(v==='')return;quizLock=true;var ua=parseInt(v,10),ok=ua===q.answer;quizAns.push(ok);var fb=document.getElementById('qf');
-  if(ok){fb.className='quiz-feedback correct show';document.getElementById('fi').textContent='\u2714';document.getElementById('fi').style.color='var(--success)';document.getElementById('ft').textContent='Benar, '+getName()+'!';document.getElementById('ft').style.color='var(--success)';document.getElementById('fa').textContent='';snd('correct');}
-  else{fb.className='quiz-feedback wrong show anim-shake';document.getElementById('fi').textContent='\u2718';document.getElementById('fi').style.color='var(--danger)';document.getElementById('ft').textContent='Salah, '+getName();document.getElementById('ft').style.color='var(--danger)';document.getElementById('fa').textContent='Jawaban: '+q.answer;snd('wrong');}
+  if(ok){fb.className='quiz-feedback correct show';document.getElementById('fi').textContent='\u2714';document.getElementById('fi').style.color='var(--success)';document.getElementById('ft').textContent=t('quiz_correct',{name:getName()});document.getElementById('ft').style.color='var(--success)';document.getElementById('fa').textContent='';snd('correct');}
+  else{fb.className='quiz-feedback wrong show anim-shake';document.getElementById('fi').textContent='\u2718';document.getElementById('fi').style.color='var(--danger)';document.getElementById('ft').textContent=t('quiz_wrong',{name:getName()});document.getElementById('ft').style.color='var(--danger)';document.getElementById('fa').textContent=t('quiz_answer',{ans:q.answer});snd('wrong');}
   inp.disabled=true;btn.disabled=true;setTimeout(function(){quizIdx++;if(quizIdx<quizQ.length)renderQuiz();else{clrT();showResult();}},1000);}
   btn.addEventListener('click',sub);inp.addEventListener('keydown',function(e){if(e.key==='Enter')sub();});
   document.getElementById('bqq').addEventListener('click',function(){clrT();if(isUjian)openUjLevels();else if(curCat)openLevels(curCat.id);});
@@ -1108,27 +1390,27 @@ function showResult(){
   var h='<div class="result-wrap"><div class="result-card anim-pop">';
   h+='<div class="score-ring-wrap"><svg class="score-ring" viewBox="0 0 120 120"><circle class="score-ring-bg" cx="60" cy="60" r="54"/>';
   h+='<circle class="score-ring-fg" id="rfg" cx="60" cy="60" r="54" stroke="'+rc+'" stroke-dasharray="'+circ+'" stroke-dashoffset="'+circ+'"/></svg>';
-  h+='<div class="score-number"><div class="score-pct" id="sp" style="color:'+rc+'">0%</div><div class="score-label">Skor</div></div></div>';
-  h+='<div class="result-detail">'+cor+' dari '+tq+' benar</div>';
+  h+='<div class="score-number"><div class="score-pct" id="sp" style="color:'+rc+'">0%</div><div class="score-label">'+t('result_score_label')+'</div></div></div>';
+  h+='<div class="result-detail">'+t('result_correct_count',{cor:cor,total:tq})+'</div>';
   if(isUjian){
     var lm={};for(var i=0;i<quizQ.length;i++){var ql=quizQ[i].level||1;if(!lm[ql])lm[ql]={t:0,c:0};lm[ql].t++;if(quizAns[i])lm[ql].c++;}
     h+='<div style="text-align:left;margin:12px 0;font-size:.85rem">';
     var lvs=Object.keys(lm).sort(function(a,b){return a-b;});
     for(var i=0;i<lvs.length;i++){var lv=lvs[i],d=lm[lv];var lc=d.c>=8?'#4CAF50':d.c>=5?'#FFA726':'#EF5350';
-    h+='<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>Level '+lv+'</span><span style="color:'+lc+';font-weight:700">'+d.c+'/'+d.t+'</span></div>';}
-    h+='</div><div class="result-hint">Waktu: '+fmtT(totalTime-timeLeft)+'</div>';
+    h+='<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>'+t('result_level',{lv:lv})+'</span><span style="color:'+lc+';font-weight:700">'+d.c+'/'+d.t+'</span></div>';}
+    h+='</div><div class="result-hint">'+t('result_time',{time:fmtT(totalTime-timeLeft)})+'</div>';
   }
   h+='<div class="star-progress-bar">';for(var s=0;s<3;s++){h+='<div class="star-slot '+(s<p.stars[lv]?'earned':'empty')+'">';h+=s<p.stars[lv]?'\u2605':'\u2606';h+='</div>';}h+='</div>';
   if(!isUjian){
-    if(p.stars[lv]<3)h+='<div class="result-hint">Kumpulkan 3 bintang (skor >70%) sebanyak '+(3-p.stars[lv])+'x lagi</div>';
-    else if(lu)h+='<div class="result-hint" style="background:#E8F5E9;color:#2E7D32">Level '+(lv+1)+' sudah terbuka!</div>';
-    else if(cd)h+='<div class="result-hint" style="background:#FFF8E1;color:#F57F17">Semua level '+co.name+' selesai!</div>';
+    if(p.stars[lv]<3)h+='<div class="result-hint">'+t('result_stars_hint',{n:(3-p.stars[lv])})+'</div>';
+    else if(lu)h+='<div class="result-hint" style="background:#E8F5E9;color:#2E7D32">'+t('result_level_unlocked',{lv:(lv+1)})+'</div>';
+    else if(cd)h+='<div class="result-hint" style="background:#FFF8E1;color:#F57F17">'+t('result_cat_done',{name:tCat(co.id)})+'</div>';
   }
   var msg='';
-  if(passed){if(isUjian)msg=pkN(MSG_CD)+' Ujian '+UJ_SEC[ujSecIdx].name+' selesai!';else if(p.stars[lv]>=3&&lv<co.maxLv)msg=pkN(MSG_G)+' Kamu sudah 3 bintang!';else if(p.stars[lv]>=3&&lv===co.maxLv)msg=pkN(MSG_CD);else msg=pkN(MSG_G)+' '+(3-p.stars[lv])+' bintang lagi.';}
-  else msg=pkN(MSG_TA)+' Butuh skor >70% untuk bintang.';
+  if(passed){if(isUjian)msg=pkMsg('msg_cd')+t('result_msg_exam_done',{name:tCat(UJ_SEC[ujSecIdx].id)});else if(p.stars[lv]>=3&&lv<co.maxLv)msg=pkMsg('msg_g')+t('result_msg_3stars');else if(p.stars[lv]>=3&&lv===co.maxLv)msg=pkMsg('msg_cd');else msg=pkMsg('msg_g')+t('result_msg_stars_left',{n:(3-p.stars[lv])});}
+  else msg=pkMsg('msg_ta')+t('result_msg_need_score');
   h+='<div class="result-msg">'+msg+'</div>';
-  h+='<div class="result-btns"><button class="btn btn-primary" id="brt">Latihan Lagi</button><button class="btn btn-secondary" id="btl">Kembali</button></div></div></div>';
+  h+='<div class="result-btns"><button class="btn btn-primary" id="brt">'+t('result_retry')+'</button><button class="btn btn-secondary" id="btl">'+t('result_back')+'</button></div></div></div>';
   el.innerHTML=h;sw('screen-result');
   setTimeout(function(){var r=document.getElementById('rfg');if(r)r.style.strokeDashoffset=circ*(1-pct/100);var pe=document.getElementById('sp');if(pe)animC(pe,0,pct,1000,'%');},150);
   if(passed)launchConf(50);
@@ -1148,9 +1430,9 @@ function showCeleb(type,lv,co){
     else snd('categoryComplete');
   },150);
   var ov=document.getElementById('overlay');var h='<div class="celeb-card">';
-  if(type==='lu'){h+='<div class="celeb-trophy" style="background:#FBE9E7"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg></div><div class="celeb-title" style="color:#FF7043">'+pkN(MSG_LU)+'</div><div class="celeb-desc">Kamu naik ke <strong>Level '+(lv+1)+'</strong> di kategori '+co.name+'!</div>';}
-  else{h+='<div class="celeb-trophy" style="background:#FFF8E1"><svg width="44" height="44" viewBox="0 0 24 24" fill="#FFB300" stroke="#F57F17" stroke-width="1"><path d="M5 3h14l-1.5 9h-11zM6.5 12L5 21h14l-1.5-9M9 21h6M10 3V1h4v2"/></svg></div><div class="celeb-title" style="color:#F57F17">'+pkN(MSG_CD)+'</div><div class="celeb-desc">Semua level <strong>'+co.name+'</strong> selesai!</div>';}
-  h+='<button class="btn btn-primary" id="bcc" style="width:100%">Lanjut</button></div>';
+  if(type==='lu'){h+='<div class="celeb-trophy" style="background:#FBE9E7"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg></div><div class="celeb-title" style="color:#FF7043">'+pkMsg('msg_lu')+'</div><div class="celeb-desc">'+t('celeb_level_up',{lv:(lv+1),name:tCat(co.id)})+'</div>';}
+  else{h+='<div class="celeb-trophy" style="background:#FFF8E1"><svg width="44" height="44" viewBox="0 0 24 24" fill="#FFB300" stroke="#F57F17" stroke-width="1"><path d="M5 3h14l-1.5 9h-11zM6.5 12L5 21h14l-1.5-9M9 21h6M10 3V1h4v2"/></svg></div><div class="celeb-title" style="color:#F57F17">'+pkMsg('msg_cd')+'</div><div class="celeb-desc">'+t('celeb_cat_done',{name:tCat(co.id)})+'</div>';}
+  h+='<button class="btn btn-primary" id="bcc" style="width:100%">'+t('celeb_continue')+'</button></div>';
   ov.innerHTML=h;ov.classList.add('show');launchConf(type==='cd'?100:70);
   document.getElementById('bcc').addEventListener('click',function(){ov.classList.remove('show');var tid=co.id;setTimeout(function(){if(tid==='ujian')openUjLevels();else openLevels(tid);},400);});
 }
@@ -1160,6 +1442,53 @@ function launchConf(n){var c=document.getElementById('confetti');c.innerHTML='';
 /* ================================================================
    MODAL PANDUAN PASANG APLIKASI PWA
    ================================================================ */
+// Fungsi untuk menerapkan terjemahan ke elemen HTML statis (modal install, toast)
+function applyTranslations() {
+  var setText = function(id, text) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = text;
+  };
+  setText('i18n-install-title', t('install_title'));
+  setText('i18n-install-intro', t('install_intro'));
+  setText('i18n-tab-android', t('install_tab_android'));
+  setText('i18n-tab-ios', t('install_tab_ios'));
+  setText('i18n-tab-desktop', t('install_tab_desktop'));
+  setText('i18n-and1', t('and_step1'));
+  setText('i18n-and2', t('and_step2'));
+  setText('i18n-and3', t('and_step3'));
+  setText('i18n-and4', t('and_step4'));
+  setText('i18n-and5', t('and_step5'));
+  setText('i18n-and-note', t('and_note'));
+  setText('i18n-ios1', t('ios_step1'));
+  setText('i18n-ios2', t('ios_step2'));
+  setText('i18n-ios3', t('ios_step3'));
+  setText('i18n-ios4', t('ios_step4'));
+  setText('i18n-ios5', t('ios_step5'));
+  setText('i18n-ios-note', t('ios_note'));
+  setText('i18n-dsk1', t('dsk_step1'));
+  setText('i18n-dsk2', t('dsk_step2'));
+  setText('i18n-dsk3', t('dsk_step3'));
+  setText('i18n-dsk4', t('dsk_step4'));
+  setText('i18n-dsk5', t('dsk_step5'));
+  setText('i18n-dsk-note', t('dsk_note'));
+  // Update aria-label & title sound toggle
+  var soundBtn = document.getElementById('sound-toggle');
+  if (soundBtn) {
+    soundBtn.setAttribute('aria-label', currentLang === 'en' ? 'Enable/Disable music' : 'Aktifkan/Matikan musik');
+    soundBtn.setAttribute('title', currentLang === 'en' ? 'Enable/Disable music' : 'Aktifkan/Matikan musik');
+  }
+  // Update toast default text
+  var toast = document.getElementById('save-toast');
+  if (toast && !toast.classList.contains('show')) toast.textContent = t('toast_saved');
+  // Update install-close aria-label
+  var installClose = document.getElementById('install-close');
+  if (installClose) installClose.setAttribute('aria-label', t('install_close'));
+  // Update html lang
+  document.documentElement.lang = currentLang;
+  // Update title tag
+  document.title = currentLang === 'en' ? 'MathKu - Learning Math' : 'MathKu - Belajar Berhitung';
+}
+
 (function initInstallModal(){
   var modal=document.getElementById('install-modal');
   if(!modal)return;
@@ -1184,18 +1513,18 @@ function launchConf(n){var c=document.getElementById('confetti');c.innerHTML='';
 })();
 
 /* ================================================================
-   INISIALISASI TOGGLE MUSIK
+   INISIALISASI TOGGLE MUSIK & BAHASA
    ================================================================ */
-(function initSoundToggle(){
+(function initSoundAndLangToggle(){
+  // Sound toggle
   var btn=document.getElementById('sound-toggle');
-  if(!btn)return;
-  // Set state awal tombol
-  if(!SoundEngine.isEnabled())btn.classList.add('muted');
-  // Listener: klik untuk toggle
-  btn.addEventListener('click',function(){
-    SoundEngine.setEnabled(!SoundEngine.isEnabled());
-  });
-  // Inisialisasi AudioContext pada interaksi pertama (autoplay policy)
+  if(btn){
+    if(!SoundEngine.isEnabled())btn.classList.add('muted');
+    btn.addEventListener('click',function(){
+      SoundEngine.setEnabled(!SoundEngine.isEnabled());
+    });
+  }
+  // Autoplay unlock
   function unlockAudio(){
     SoundEngine.initCtx();
     document.removeEventListener('click',unlockAudio);
@@ -1205,6 +1534,38 @@ function launchConf(n){var c=document.getElementById('confetti');c.innerHTML='';
   document.addEventListener('click',unlockAudio);
   document.addEventListener('touchstart',unlockAudio);
   document.addEventListener('keydown',unlockAudio);
+
+  // Language toggle
+  var langBtn=document.getElementById('lang-toggle');
+  var langFlag=document.getElementById('lang-flag');
+  if(langFlag) langFlag.textContent = currentLang === 'id' ? 'ID' : 'EN';
+  if(langBtn){
+    langBtn.addEventListener('click',function(){
+      snd('click');
+      var newLang = currentLang === 'id' ? 'en' : 'id';
+      setLang(newLang);
+      applyTranslations();
+      // Re-render current screen to update dynamic text
+      var activeScreen = document.querySelector('.screen.active');
+      if(activeScreen){
+        var sid = activeScreen.id;
+        if(sid === 'screen-home') renderHome();
+        else if(sid === 'screen-levels' && curCat){
+          if(curCat.id === 'ujian') openUjLevels();
+          else openLevels(curCat.id);
+        }
+        else if(sid === 'screen-quiz' && quizQ.length > 0) renderQuiz();
+        else if(sid === 'screen-result' && quizQ.length > 0) showResult();
+      }
+      // Jika di access screen, re-render
+      var ov = document.getElementById('overlay');
+      if(ov && ov.classList.contains('show') && !progress.accessGranted){
+        showAccessScreen();
+      }
+    });
+  }
+  // Apply translations on initial load
+  applyTranslations();
 })();
 
 /* ================================================================
@@ -1235,11 +1596,11 @@ function launchConf(n){var c=document.getElementById('confetti');c.innerHTML='';
     // Tampilkan toast konfirmasi
     var toast = document.getElementById('save-toast');
     if(toast){
-      toast.textContent = 'MathKu berhasil dipasang!';
+      toast.textContent = t('toast_install_success');
       toast.classList.add('show');
       setTimeout(function(){
         toast.classList.remove('show');
-        toast.textContent = 'Progres tersimpan';
+        toast.textContent = t('toast_saved');
       }, 3000);
     }
   });
