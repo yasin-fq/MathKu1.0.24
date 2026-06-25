@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#FF7043">
+<meta name="description" content="MathKu - Aplikasi belajar berhitung menyenangkan untuk anak Indonesia">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="MathKu">
 <title>MathKu - Belajar Berhitung</title>
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="mask-icon" href="icon.svg" color="#FF7043">
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
@@ -245,6 +254,49 @@
     .quiz-question{font-size:1.4rem;}
   }
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+  /* ===== Tombol Pasang Aplikasi ===== */
+  .install-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    margin-top:14px;padding:10px 22px;
+    background:var(--card);color:var(--accent);
+    border:2px solid var(--accent);border-radius:30px;
+    font-family:inherit;font-size:.9rem;font-weight:700;
+    cursor:pointer;transition:all .2s;box-shadow:var(--shadow);
+  }
+  .install-btn:hover{background:var(--accent);color:#fff;transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,112,67,.3)}
+  .install-btn:active{transform:translateY(0) scale(.97)}
+  .install-btn svg{width:18px;height:18px;flex-shrink:0}
+
+  /* ===== Modal Panduan PWA ===== */
+  .pwa-overlay{position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .35s;padding:16px;overflow-y:auto}
+  .pwa-overlay.show{opacity:1;pointer-events:auto}
+  .pwa-modal{background:var(--card);border-radius:20px;max-width:480px;width:100%;box-shadow:var(--shadow-lg);transform:scale(.85) translateY(20px);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow:hidden;display:flex;flex-direction:column}
+  .pwa-overlay.show .pwa-modal{transform:scale(1) translateY(0)}
+  .pwa-modal-header{padding:22px 22px 14px;text-align:center;border-bottom:1px solid var(--border);flex-shrink:0}
+  .pwa-modal-icon{width:64px;height:64px;margin:0 auto 10px;border-radius:18px;background:linear-gradient(135deg,#FF7043,#EC407A,#AB47BC);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.8rem;font-weight:900;box-shadow:0 6px 16px rgba(255,112,67,.3)}
+  .pwa-modal-title{font-size:1.3rem;font-weight:800;color:var(--text)}
+  .pwa-modal-sub{font-size:.85rem;color:var(--text-light);margin-top:4px}
+  .pwa-modal-body{padding:18px 22px;overflow-y:auto;flex:1}
+  .pwa-tabs{display:flex;gap:6px;background:var(--bg-alt);padding:5px;border-radius:12px;margin-bottom:16px}
+  .pwa-tab{flex:1;padding:9px 8px;border:none;background:transparent;border-radius:8px;font-family:inherit;font-size:.82rem;font-weight:600;color:var(--text-light);cursor:pointer;transition:all .2s}
+  .pwa-tab.active{background:var(--card);color:var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.06)}
+  .pwa-tab-content{display:none;animation:sIn .3s ease both}
+  .pwa-tab-content.active{display:block}
+  .pwa-step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+  .pwa-step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;flex-shrink:0}
+  .pwa-step-text{font-size:.9rem;line-height:1.55;color:var(--text);padding-top:3px}
+  .pwa-step-text strong{color:var(--accent);font-weight:700}
+  .pwa-note{margin-top:14px;padding:12px 14px;background:var(--bg-alt);border-left:3px solid var(--accent);border-radius:8px;font-size:.82rem;color:var(--text);line-height:1.5}
+  .pwa-modal-footer{padding:14px 22px 18px;border-top:1px solid var(--border);flex-shrink:0}
+  .pwa-modal-footer .btn{width:100%}
+  @media(max-width:520px){
+    .pwa-modal{max-width:100%}
+    .pwa-modal-header{padding:18px 18px 12px}
+    .pwa-modal-body{padding:14px 18px}
+    .pwa-modal-footer{padding:12px 18px 16px}
+    .pwa-tab{font-size:.78rem;padding:8px 4px}
+  }
 </style>
 </head>
 <body>
@@ -256,6 +308,7 @@
   <div id="screen-result" class="screen"></div>
 </div>
 <div id="overlay" class="overlay"></div>
+<div id="pwa-overlay" class="pwa-overlay"></div>
 <div id="confetti"></div>
 <div class="save-toast" id="save-toast">Progres tersimpan</div>
 
@@ -555,12 +608,14 @@ function showAccessScreen() {
 
 function renderHome(){
   var el=document.getElementById('screen-home');
-  var h='<header class="home-header"><div class="home-title">MathKu</div><div class="home-subtitle">Halo '+getName()+', Belajar Berhitung Jadi Menyenangkan</div><div class="save-indicator" id="save-ind">\u2713 Progres tersimpan otomatis</div></header><div class="cat-grid">';
+  var h='<header class="home-header"><div class="home-title">MathKu</div><div class="home-subtitle">Halo '+getName()+', Belajar Berhitung Jadi Menyenangkan</div><button class="install-btn" id="btn-install"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>Pasang Aplikasi</button><div class="save-indicator" id="save-ind">\u2713 Progres tersimpan otomatis</div></header><div class="cat-grid">';
   for(var i=0;i<CATS.length;i++){
     var c=CATS[i],p=progress[c.id],ts=0;
     for(var j=1;j<=c.maxLv;j++)ts+=Math.min(p.stars[j],3);
     var pct=Math.round((ts/(c.maxLv*3))*100);
-    var done=p.unlocked>c.maxLv;
+    var done;
+    if(c.id==='ujian'){var ujDone=0;for(var u=0;u<UJ_SEC.length;u++){if((p.stars[u+1]||0)>=3)ujDone++;}done=ujDone>=UJ_SEC.length;}
+    else done=p.unlocked>c.maxLv;
     var ic=c.isEmoji?'cat-icon cat-icon-emoji':'cat-icon';
     h+='<div class="cat-card'+(done?' completed':'')+'" data-cat="'+c.id+'">';
     h+='<div class="'+ic+'" style="background:'+c.color+'">'+c.icon+'</div>';
@@ -574,6 +629,7 @@ function renderHome(){
   el.innerHTML=h;
   var cards=el.querySelectorAll('.cat-card');
   for(var i=0;i<cards.length;i++){(function(cd){cd.addEventListener('click',function(){var id=cd.getAttribute('data-cat');if(id==='ujian')openUjLevels();else openLevels(id);});})(cards[i]);}
+  document.getElementById('btn-install').addEventListener('click',showInstallGuide);
   document.getElementById('btn-reset').addEventListener('click',function(){
     document.getElementById('reset-area').innerHTML='<div class="reset-confirm"><span>Yakin hapus semua progress?</span><button id="ry">Hapus</button><button class="btn-cancel" id="rn">Batal</button></div>';
     document.getElementById('ry').addEventListener('click',function(){
@@ -658,7 +714,7 @@ function showExamIntro(si){
   h+='<div class="result-msg" style="margin-bottom:16px; font-size:1.3rem;">Ujian: '+sec.name+'</div>';
   h+='<div style="text-align:left; background:var(--bg-alt); padding:16px; border-radius:12px; max-width:340px; margin-bottom:20px; font-size:.9rem; line-height:1.6;">';
   h+='<p style="margin-bottom:10px;"><strong>\u23F1 Waktu Ujian:</strong> Kamu punya waktu <strong>'+sec.time+' menit</strong> untuk mengerjakan 10 soal. Kerjakan dengan cepat tapi teliti!</p>';
-  h+='<p style="margin-bottom:0;"><strong>"Ya Allah, berkahilah ilmu yang kau berikan padaku."</p>';
+  h+='<p style="margin-bottom:0;"><strong>"Ya Allah, berkahilah ilmu yang kau berikan padaku."</strong></p>';
   h+='</div>';
   h+='<div style="font-size:.95rem; color:var(--text-light); margin-bottom:4px;">Ujian dimulai dalam:</div>';
   h+='<div id="countdown-timer" class="anim-pop" style="font-size:4rem; font-weight:900; color:var(--accent); margin:0;">5</div>';
@@ -790,6 +846,91 @@ function showCeleb(type,lv,co){
 }
 
 function launchConf(n){var c=document.getElementById('confetti');c.innerHTML='';var cols=['#FF7043','#66BB6A','#42A5F5','#AB47BC','#FFA726','#EC407A','#26A69A','#FFD54F','#7E57C2'];for(var i=0;i<n;i++){var p=document.createElement('div');p.className='confetti-p';p.style.left=(Math.random()*100)+'%';p.style.backgroundColor=cols[Math.floor(Math.random()*cols.length)];p.style.width=(Math.random()*8+5)+'px';p.style.height=(Math.random()*12+5)+'px';p.style.borderRadius=Math.random()<.33?'50%':Math.random()<.5?'3px':'0';p.style.animationDelay=(Math.random()*.8)+'s';p.style.animationDuration=(Math.random()*2+2)+'s';p.style.opacity=(Math.random()*.5+.5);c.appendChild(p);}setTimeout(function(){c.innerHTML='';},5000);}
+
+/* ================================================================
+   PANDUAN PASANG APLIKASI (PWA)
+   ================================================================ */
+function showInstallGuide(){
+  var ov=document.getElementById('pwa-overlay');
+  if(!ov)return;
+  // Deteksi platform pengguna
+  var ua=navigator.userAgent||'';
+  var isIOS=/iPad|iPhone|iPod/.test(ua)&&!window.MSStream;
+  var isAndroid=/Android/i.test(ua);
+  var defaultTab=isIOS?'ios':(isAndroid?'android':'desktop');
+
+  var html='';
+  html+='<div class="pwa-modal">';
+  html+='<div class="pwa-modal-header">';
+  html+='<div class="pwa-modal-icon">M</div>';
+  html+='<div class="pwa-modal-title">Pasang MathKu di Perangkat</div>';
+  html+='<div class="pwa-modal-sub">Akses lebih cepat tanpa membuka browser</div>';
+  html+='</div>';
+  html+='<div class="pwa-modal-body">';
+  html+='<div class="pwa-tabs">';
+  html+='<button class="pwa-tab'+(defaultTab==='android'?' active':'')+'" data-tb="android">Android</button>';
+  html+='<button class="pwa-tab'+(defaultTab==='ios'?' active':'')+'" data-tb="ios">iPhone/iPad</button>';
+  html+='<button class="pwa-tab'+(defaultTab==='desktop'?' active':'')+'" data-tb="desktop">Desktop</button>';
+  html+='</div>';
+
+  // Android
+  html+='<div class="pwa-tab-content'+(defaultTab==='android'?' active':'')+'" data-tc="android">';
+  html+='<div class="pwa-step"><div class="pwa-step-num">1</div><div class="pwa-step-text">Buka aplikasi <strong>Browser Chrome</strong> di HP Android kamu.</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">2</div><div class="pwa-step-text">Kunjungi halaman MathKu, lalu ketuk ikon <strong>titik tiga</strong> di pojok kanan atas browser.</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">3</div><div class="pwa-step-text">Pilih menu <strong>"Tambahkan ke Layar utama"</strong> atau <strong>"Pasang aplikasi"</strong>.</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">4</div><div class="pwa-step-text">Ketuk <strong>"Pasang"</strong>. Ikon MathKu akan muncul di layar utama HP kamu.</div></div>';
+  html+='<div class="pwa-note">Ikon MathKu bisa dibuka tanpa browser, seperti aplikasi biasa. Progres belajar tetap tersimpan.</div>';
+  html+='</div>';
+
+  // iOS
+  html+='<div class="pwa-tab-content'+(defaultTab==='ios'?' active':'')+'" data-tc="ios">';
+  html+='<div class="pwa-step"><div class="pwa-step-num">1</div><div class="pwa-step-text">Buka aplikasi <strong>Safari</strong> di iPhone atau iPad kamu (wajib Safari, bukan Chrome).</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">2</div><div class="pwa-step-text">Kunjungi halaman MathKu, lalu ketuk tombol <strong>"Bagikan"</strong> (ikon kotak dengan panah ke atas) di bawah layar.</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">3</div><div class="pwa-step-text">Gulir ke bawah, pilih <strong>"Tambahkan ke Layar Utama"</strong>.</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">4</div><div class="pwa-step-text">Ketuk <strong>"Tambah"</strong> di pojok kanan atas. Ikon MathKu akan tampil di layar utama.</div></div>';
+  html+='<div class="pwa-note">Di iPhone, aplikasi hanya bisa dipasang lewat Safari. Chrome atau Firefox di iOS tidak mendukung fitur ini.</div>';
+  html+='</div>';
+
+  // Desktop
+  html+='<div class="pwa-tab-content'+(defaultTab==='desktop'?' active':'')+'" data-tc="desktop">';
+  html+='<div class="pwa-step"><div class="pwa-step-num">1</div><div class="pwa-step-text">Buka <strong>Google Chrome</strong> atau <strong>Microsoft Edge</strong> di laptop/komputer kamu.</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">2</div><div class="pwa-step-text">Kunjungi halaman MathKu. Cari ikon <strong>pasang</strong> di ujung kanan address bar.</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">3</div><div class="pwa-step-text">Klik ikon tersebut, lalu pilih <strong>"Pasang"</strong>. Atau melalui menu (titik tiga) -> <strong>"Pasang MathKu"</strong>.</div></div>';
+  html+='<div class="pwa-step"><div class="pwa-step-num">4</div><div class="pwa-step-text">MathKu akan terbuka di jendela tersendiri dan ada ikonnya di desktop / Start Menu.</div></div>';
+  html+='<div class="pwa-note">Jika ikon pasang tidak muncul, pastikan browser sudah diperbarui ke versi terbaru dan kamu mengakses lewat HTTPS.</div>';
+  html+='</div>';
+
+  html+='</div>';
+  html+='<div class="pwa-modal-footer"><button class="btn btn-primary" id="pwa-close">Mengerti, Tutup</button></div>';
+  html+='</div>';
+
+  ov.innerHTML=html;
+  ov.classList.add('show');
+
+  // Tab switching
+  var tabs=ov.querySelectorAll('.pwa-tab');
+  for(var i=0;i<tabs.length;i++){
+    tabs[i].addEventListener('click',function(){
+      var tb=this.getAttribute('data-tb');
+      for(var j=0;j<tabs.length;j++)tabs[j].classList.remove('active');
+      this.classList.add('active');
+      var contents=ov.querySelectorAll('.pwa-tab-content');
+      for(var k=0;k<contents.length;k++)contents[k].classList.remove('active');
+      var target=ov.querySelector('.pwa-tab-content[data-tc="'+tb+'"]');
+      if(target)target.classList.add('active');
+    });
+  }
+  // Close handlers
+  document.getElementById('pwa-close').addEventListener('click',function(){ov.classList.remove('show');});
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.classList.remove('show');});
+}
+
+// Tangkap event install prompt browser (jika mendukung)
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  deferredPrompt=e;
+});
 
 startApp();
 </script>
