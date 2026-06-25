@@ -27,7 +27,6 @@ Belajar berhitung dengan cara yang menyenangkan — penjumlahan, pengurangan, pe
 8. [Menjalankan Secara Lokal](#menjalankan-secara-lokal)
 9. [Mengembangkan Aplikasi](#mengembangkan-aplikasi)
 10. [Lisensi & Kredit](#lisensi--kredit)
-11. [Mengunduh Aplikasi](#mengunduh-aplikasi)
 
 ---
 
@@ -364,50 +363,8 @@ Kode aplikasi dirilis di bawah lisensi **MIT** — bebas digunakan, dimodifikasi
 
 - **Pengembang**: MathKu Team
 - **Tahun**: 2026
-- **Versi**: 1.0.25 (Beta) · PWA Edition · i18n
+- **Versi**: 1.0.25 (Beta)
 - **Dibuat untuk**: Pendidikan anak Indonesia
-
----
-
-## Mengunduh Aplikasi
-
-### Opsi 1: Unduh File ZIP Lengkap (paling mudah)
-
-Semua file aplikasi sudah dikemas dalam satu file ZIP siap unduh:
-
-**📎 [mathku-app.zip](./mathku-app.zip)** (~120 KB)
-
-Setelah diunduh:
-1. Ekstrak ZIP di komputer Anda
-2. Buka folder hasil ekstrak
-3. Jalankan server lokal (lihat [Menjalankan Secara Lokal](#menjalankan-secara-lokal))
-4. Buka `http://localhost:8000` di browser
-
-### Opsi 2: Unduh File README saja
-
-**📎 [README.md](./README.md)** (~17 KB)
-
-File README berisi dokumentasi lengkap. Anda dapat mengunduhnya secara terpisah untuk referensi atau sebagai template dokumentasi proyek Anda sendiri.
-
-### Opsi 3: Unduh File LICENSE saja
-
-**📎 [LICENSE](./LICENSE)** (~3 KB)
-
-File lisensi MIT + CC0. Sertakan file ini di fork atau redistribusi Anda untuk mematuhi syarat lisensi.
-
-### Opsi 4: Unduh Per File
-
-Daftar file individual yang tersedia untuk diunduh:
-
-| File | Ukuran | Deskripsi |
-|------|--------|-----------|
-| [index.html](./index.html) | ~92 KB | Aplikasi utama |
-| [manifest.json](./manifest.json) | ~1.7 KB | Konfigurasi PWA |
-| [sw.js](./sw.js) | ~4.7 KB | Service Worker |
-| [icon.svg](./icon.svg) | ~1.8 KB | Ikon SVG master |
-| [LICENSE](./LICENSE) | ~3 KB | Lisensi MIT + CC0 |
-| [README.md](./README.md) | ~17 KB | Dokumentasi ini |
-| [icons/](./icons/) | ~70 KB total | 6 file PNG ikon |
 
 ---
 
