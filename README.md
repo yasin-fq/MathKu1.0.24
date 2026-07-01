@@ -2,6 +2,8 @@
 
 <div align="center">
 
+![MathKu](icon.svg)
+
 **Aplikasi edukasi matematika untuk anak Indonesia**
 
 Belajar berhitung dengan cara yang menyenangkan — penjumlahan, pengurangan, perkalian, pembagian, kombinasi, soal advance, dan mode ujian. Progres otomatis tersimpan, bisa dipasang sebagai aplikasi (PWA), dan berfungsi offline.
@@ -27,6 +29,7 @@ Belajar berhitung dengan cara yang menyenangkan — penjumlahan, pengurangan, pe
 8. [Menjalankan Secara Lokal](#menjalankan-secara-lokal)
 9. [Mengembangkan Aplikasi](#mengembangkan-aplikasi)
 10. [Lisensi & Kredit](#lisensi--kredit)
+11. [Mengunduh Aplikasi](#mengunduh-aplikasi)
 
 ---
 
@@ -96,7 +99,7 @@ Untuk pengalaman terbaik di HP Android, klik tombol **"Pasang Aplikasi"** di baw
 
 ## Kode Akses
 
-> Aplikasi memerlukan kode akses 6 digit untuk dibuka. Kode ini bertindak sebagai pintu masuk sederhana dan mencegah akses tidak sah dari pengguna acak.
+> Aplikasi memerlukan kode akses untuk membuka Level 2 dan seterusnya. Level 1 di setiap kategori bisa dicoba gratis tanpa kode.
 
 | Konfigurasi | Nilai |
 |-------------|-------|
@@ -104,11 +107,19 @@ Untuk pengalaman terbaik di HP Android, klik tombol **"Pasang Aplikasi"** di baw
 | Format | 6 digit angka |
 | Lokasi di file | `index.html`, pada bagian konfigurasi global |
 
+### Cara Kerja Gate
+
+1. **Saat pertama buka aplikasi**: User hanya diminta memasukkan nama (tanpa kode akses)
+2. **Level 1 gratis**: User bisa mencoba Level 1 di semua kategori tanpa kode akses
+3. **Level 2+ terkunci**: Saat user klik Level 2 (atau level lebih tinggi) di kategori mana pun, modal gate muncul meminta kode akses
+4. **Ujian section 2+ terkunci**: Sama seperti kategori biasa, ujian section 1 gratis, section 2+ butuh kode
+5. **Sekali masukkan, semua terbuka**: Setelah kode benar dimasukkan sekali, `accessGranted=true` disimpan dan gate tidak muncul lagi untuk semua kategori
+
 ### Cara Mendapatkan Kode Akses
 
 Kode akses sengaja **tidak ditampilkan secara terbuka** di README ini untuk menjaga keamanan dasar. Berikut cara memperolehnya:
 
-- **Untuk pengguna akhir**: Klik link kecil **"Minta akses"** di halaman awal aplikasi — akan mengarahkan ke [lynk.id/qafstudio](https://lynk.id/qafstudio) untuk request akses
+- **Untuk pengguna akhir**: Klik link kecil **"Minta akses"** di halaman awal aplikasi atau di modal gate — akan mengarahkan ke [lynk.id/qafstudio](https://lynk.id/qafstudio) untuk request akses
 - **Atau hubungi langsung** pengembang / guru / pihak yang membagikan aplikasi ini kepada Anda
 - **Untuk pengembang / admin**: Buka file `index.html`, cari deklarasi `var DEV_CODE =` di bagian atas script (sekitar baris 486). Nilai string yang diapit tanda kutip adalah kode aksesnya
 - **Untuk mengganti kode**: Edit nilai `DEV_CODE` di `index.html`. Perubahan langsung berlaku, tidak perlu build step
@@ -363,8 +374,50 @@ Kode aplikasi dirilis di bawah lisensi **MIT** — bebas digunakan, dimodifikasi
 
 - **Pengembang**: MathKu Team
 - **Tahun**: 2026
-- **Versi**: 1.0.25 (Beta)
+- **Versi**: 1.0.25 (Beta) · PWA Edition · i18n
 - **Dibuat untuk**: Pendidikan anak Indonesia
+
+---
+
+## Mengunduh Aplikasi
+
+### Opsi 1: Unduh File ZIP Lengkap (paling mudah)
+
+Semua file aplikasi sudah dikemas dalam satu file ZIP siap unduh:
+
+**📎 [mathku-app.zip](./mathku-app.zip)** (~120 KB)
+
+Setelah diunduh:
+1. Ekstrak ZIP di komputer Anda
+2. Buka folder hasil ekstrak
+3. Jalankan server lokal (lihat [Menjalankan Secara Lokal](#menjalankan-secara-lokal))
+4. Buka `http://localhost:8000` di browser
+
+### Opsi 2: Unduh File README saja
+
+**📎 [README.md](./README.md)** (~17 KB)
+
+File README berisi dokumentasi lengkap. Anda dapat mengunduhnya secara terpisah untuk referensi atau sebagai template dokumentasi proyek Anda sendiri.
+
+### Opsi 3: Unduh File LICENSE saja
+
+**📎 [LICENSE](./LICENSE)** (~3 KB)
+
+File lisensi MIT + CC0. Sertakan file ini di fork atau redistribusi Anda untuk mematuhi syarat lisensi.
+
+### Opsi 4: Unduh Per File
+
+Daftar file individual yang tersedia untuk diunduh:
+
+| File | Ukuran | Deskripsi |
+|------|--------|-----------|
+| [index.html](./index.html) | ~92 KB | Aplikasi utama |
+| [manifest.json](./manifest.json) | ~1.7 KB | Konfigurasi PWA |
+| [sw.js](./sw.js) | ~4.7 KB | Service Worker |
+| [icon.svg](./icon.svg) | ~1.8 KB | Ikon SVG master |
+| [LICENSE](./LICENSE) | ~3 KB | Lisensi MIT + CC0 |
+| [README.md](./README.md) | ~17 KB | Dokumentasi ini |
+| [icons/](./icons/) | ~70 KB total | 6 file PNG ikon |
 
 ---
 

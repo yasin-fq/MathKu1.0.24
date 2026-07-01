@@ -510,16 +510,23 @@ try {
 var I18N = {
   id: {
     // Akses
-    access_welcome: 'Selamat datang! Silakan masukkan Nama dan Kode Akses yang diberikan oleh pengembang untuk melanjutkan.',
+    access_welcome: 'Selamat datang! Silakan masukkan Nama kamu untuk mulai belajar berhitung.',
     access_request_link: 'Minta akses',
     access_name_ph: 'Nama Kamu',
     access_code_ph: 'Kode Akses',
-    access_btn: 'Buka Aplikasi',
+    access_btn: 'Mulai Belajar',
     access_err_name: 'Nama tidak boleh kosong.',
     access_err_code: 'Kode akses salah!',
-    access_granted_title: 'Akses Diberikan!',
-    access_granted_desc: 'Halo <strong>{name}</strong>, selamat memulai. Mari biasakan berdoa sebelum memulai pelajaran.',
+    access_granted_title: 'Selamat Datang!',
+    access_granted_desc: 'Halo <strong>{name}</strong>, selamat belajar. Mari biasakan berdoa sebelum memulai pelajaran.',
     access_continue: 'Lanjut',
+    // Gate (Level 2+)
+    gate_title: 'Kode Akses Diperlukan',
+    gate_desc: 'Kamu sudah menyelesaikan Level 1. Masukkan kode akses untuk membuka Level 2 dan seterusnya. Kode berlaku untuk semua kategori.',
+    gate_btn: 'Buka Level',
+    gate_cancel: 'Kembali',
+    gate_success: 'Akses diberikan! Semua level kini terbuka.',
+    gate_err_code: 'Kode akses salah! Coba lagi atau minta akses.',
     // Home
     home_subtitle: 'Halo {name}, Belajar Berhitung Jadi Menyenangkan',
     home_install_btn: 'Pasang Aplikasi',
@@ -616,16 +623,23 @@ var I18N = {
   },
   en: {
     // Access
-    access_welcome: 'Welcome! Please enter your Name and Access Code provided by the developer to continue.',
+    access_welcome: 'Welcome! Please enter your Name to start learning math.',
     access_request_link: 'Request access',
     access_name_ph: 'Your Name',
     access_code_ph: 'Access Code',
-    access_btn: 'Open App',
+    access_btn: 'Start Learning',
     access_err_name: 'Name cannot be empty.',
     access_err_code: 'Wrong access code!',
-    access_granted_title: 'Access Granted!',
-    access_granted_desc: 'Hello <strong>{name}</strong>, welcome aboard. Let\u2019s make a habit of praying before starting the lesson.',
+    access_granted_title: 'Welcome!',
+    access_granted_desc: 'Hello <strong>{name}</strong>, happy learning. Let\'s make a habit of praying before starting the lesson.',
     access_continue: 'Continue',
+    // Gate (Level 2+)
+    gate_title: 'Access Code Required',
+    gate_desc: 'You\'ve completed Level 1. Enter the access code to unlock Level 2 and beyond. Code applies to all categories.',
+    gate_btn: 'Unlock Level',
+    gate_cancel: 'Back',
+    gate_success: 'Access granted! All levels are now unlocked.',
+    gate_err_code: 'Wrong access code! Try again or request access.',
     // Home
     home_subtitle: 'Hi {name}, Learning Math Becomes Fun',
     home_install_btn: 'Install App',
@@ -1108,7 +1122,8 @@ var timerInt=null,timeLeft=0,totalTime=0,isUjian=false,ujSecIdx=-1,examIntroIntv
 function sw(id){var s=document.querySelectorAll('.screen');for(var i=0;i<s.length;i++)s[i].classList.remove('active');document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 
 function startApp() {
-  if (!progress.accessGranted) {
+  // Hanya minta nama di awal; kode akses diminta nanti saat Level 2+
+  if (!progress.userName) {
     showAccessScreen();
   } else {
     renderHome();
@@ -1120,9 +1135,8 @@ function showAccessScreen() {
   var h = '<div class="celeb-card" style="max-width:380px; text-align:center;">';
   h += '<div class="home-title" style="font-size:2rem; margin-bottom:20px; -webkit-text-fill-color: var(--accent); background: none;">MathKu</div>';
   h += '<div style="font-size:.9rem; color:var(--text-light); margin-bottom:14px;">'+t('access_welcome')+'</div>';
-  h += '<a href="https://lynk.id/qafstudio/1nl20ng051gn" target="_blank" rel="noopener noreferrer" class="access-request-link"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"width:14px;height:14px;flex-shrink:0\"><path d=\"M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\"/><path d=\"M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\"/></svg>'+t('access_request_link')+'<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"width:12px;height:12px;flex-shrink:0\"><path d=\"M7 17L17 7\"/><polyline points=\"7 7 17 7 17 17\"/></svg></a>';
+  h += '<a href="https://lynk.id/qafstudio" target="_blank" rel="noopener noreferrer" class="access-request-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>'+t('access_request_link')+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0"><path d="M7 17L17 7"/><polyline points="7 7 17 7 17 17"/></svg></a>';
   h += '<input type="text" id="access-name" class="quiz-input" placeholder="'+t('access_name_ph')+'" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
-  h += '<input type="text" id="access-code" class="quiz-input" placeholder="'+t('access_code_ph')+'" inputmode="numeric" maxlength="6" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem;">';
   h += '<div id="access-error" style="color:var(--danger); font-size:.85rem; height:18px; margin-bottom:8px;"></div>';
   h += '<button class="btn btn-primary" id="access-btn" style="width:100%; max-width:280px;">'+t('access_btn')+'</button>';
   h += '</div>';
@@ -1131,24 +1145,18 @@ function showAccessScreen() {
 
   document.getElementById('access-btn').addEventListener('click', function() {
     var name = document.getElementById('access-name').value.trim();
-    var code = document.getElementById('access-code').value.trim();
 
     if (!name) {
       document.getElementById('access-error').textContent = t('access_err_name');
-      return;
-    }
-    if (code !== DEV_CODE) {
-      document.getElementById('access-error').textContent = t('access_err_code');
-      document.getElementById('access-code').classList.add('anim-shake');
-      setTimeout(function(){ document.getElementById('access-code').classList.remove('anim-shake'); }, 400);
+      document.getElementById('access-name').classList.add('anim-shake');
+      setTimeout(function(){ document.getElementById('access-name').classList.remove('anim-shake'); }, 400);
       return;
     }
 
-    progress.accessGranted = true;
     progress.userName = name;
     saveProg(progress);
 
-    // Musik sambutan setelah akses diberikan
+    // Musik sambutan
     snd('accessGranted');
 
     ov.innerHTML = '<div class="celeb-card" style="max-width:380px; text-align:center;">' +
@@ -1161,6 +1169,69 @@ function showAccessScreen() {
       ov.classList.remove('show');
       renderHome();
     });
+  });
+}
+
+/* ================================================================
+   GATE KODE AKSES - Muncul saat user ingin akses Level 2+
+   Setelah kode benar, accessGranted=true & gate nonaktif untuk semua kategori
+   ================================================================ */
+function showAccessGate(onSuccess) {
+  var ov = document.getElementById('overlay');
+  var h = '<div class="celeb-card" style="max-width:380px; text-align:center;">';
+  h += '<div class="celeb-trophy" style="background:#FFF3E0"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>';
+  h += '<div class="celeb-title" style="color:#FF7043">'+t('gate_title')+'</div>';
+  h += '<div class="celeb-desc">'+t('gate_desc')+'</div>';
+  h += '<a href="https://lynk.id/qafstudio" target="_blank" rel="noopener noreferrer" class="access-request-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>'+t('access_request_link')+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;flex-shrink:0"><path d="M7 17L17 7"/><polyline points="7 7 17 7 17 17"/></svg></a>';
+  h += '<input type="text" id="gate-code" class="quiz-input" placeholder="'+t('access_code_ph')+'" inputmode="numeric" maxlength="6" style="margin-bottom:12px; width:100%; max-width:280px; height:48px; font-size:1.1rem; text-align:center; letter-spacing:4px;">';
+  h += '<div id="gate-error" style="color:var(--danger); font-size:.85rem; height:18px; margin-bottom:8px;"></div>';
+  h += '<button class="btn btn-primary" id="gate-btn" style="width:100%; max-width:280px; margin-bottom:8px;">'+t('gate_btn')+'</button>';
+  h += '<button class="btn btn-secondary" id="gate-cancel" style="width:100%; max-width:280px;">'+t('gate_cancel')+'</button>';
+  h += '</div>';
+  ov.innerHTML = h;
+  ov.classList.add('show');
+  snd('click');
+
+  // Auto-focus input
+  setTimeout(function(){ var inp = document.getElementById('gate-code'); if(inp) inp.focus(); }, 100);
+
+  function verify() {
+    var code = document.getElementById('gate-code').value.trim();
+    if (!code) return;
+    if (code !== DEV_CODE) {
+      document.getElementById('gate-error').textContent = t('gate_err_code');
+      document.getElementById('gate-code').classList.add('anim-shake');
+      setTimeout(function(){ document.getElementById('gate-code').classList.remove('anim-shake'); }, 400);
+      snd('wrong');
+      return;
+    }
+    // Kode benar: unlock semua kategori
+    progress.accessGranted = true;
+    saveProg(progress);
+    snd('accessGranted');
+
+    // Tampilkan toast sukses
+    var toast = document.getElementById('save-toast');
+    if(toast){
+      toast.textContent = t('gate_success');
+      toast.classList.add('show');
+      setTimeout(function(){
+        toast.classList.remove('show');
+        toast.textContent = t('toast_saved');
+      }, 2500);
+    }
+
+    ov.classList.remove('show');
+    // Lanjutkan aksi yang diminta user (startQuiz / startUjian)
+    setTimeout(function(){ if(typeof onSuccess === 'function') onSuccess(); }, 300);
+  }
+
+  document.getElementById('gate-btn').addEventListener('click', verify);
+  document.getElementById('gate-code').addEventListener('keydown', function(e){ if(e.key === 'Enter') verify(); });
+  document.getElementById('gate-code').addEventListener('input', function(){ this.value = this.value.replace(/[^0-9]/g,''); });
+  document.getElementById('gate-cancel').addEventListener('click', function(){
+    snd('click');
+    ov.classList.remove('show');
   });
 }
 
@@ -1242,7 +1313,14 @@ function openLevels(catId){
   h+='</div>';el.innerHTML=h;sw('screen-levels');
   document.getElementById('bbl').addEventListener('click',function(){renderHome();});
   var nodes=el.querySelectorAll('.level-node:not(.locked)');
-  for(var i=0;i<nodes.length;i++){(function(n){n.addEventListener('click',function(){startQuiz(catId,parseInt(n.getAttribute('data-level')));});})(nodes[i]);}
+  for(var i=0;i<nodes.length;i++){(function(n){n.addEventListener('click',function(){
+    var lv=parseInt(n.getAttribute('data-level'));
+    if(lv>=2 && !progress.accessGranted){
+      showAccessGate(function(){ startQuiz(catId,lv); });
+    } else {
+      startQuiz(catId,lv);
+    }
+  });})(nodes[i]);}
 }
 
 function openUjLevels(){
@@ -1262,7 +1340,14 @@ function openUjLevels(){
   h+='</div>';el.innerHTML=h;sw('screen-levels');
   document.getElementById('bbl').addEventListener('click',function(){renderHome();});
   var nodes=el.querySelectorAll('.level-node');
-  for(var i=0;i<nodes.length;i++){(function(n){n.addEventListener('click',function(){startUjian(parseInt(n.getAttribute('data-ujidx')));});})(nodes[i]);}
+  for(var i=0;i<nodes.length;i++){(function(n){n.addEventListener('click',function(){
+    var ujIdx=parseInt(n.getAttribute('data-ujidx'));
+    if(ujIdx>=1 && !progress.accessGranted){
+      showAccessGate(function(){ startUjian(ujIdx); });
+    } else {
+      startUjian(ujIdx);
+    }
+  });})(nodes[i]);}
 }
 
 function startQuiz(catId,lv){
