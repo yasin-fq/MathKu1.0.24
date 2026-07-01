@@ -2,8 +2,6 @@
 
 <div align="center">
 
-![MathKu](icon.svg)
-
 **Aplikasi edukasi matematika untuk anak Indonesia**
 
 Belajar berhitung dengan cara yang menyenangkan — penjumlahan, pengurangan, perkalian, pembagian, kombinasi, soal advance, dan mode ujian. Progres otomatis tersimpan, bisa dipasang sebagai aplikasi (PWA), dan berfungsi offline.
@@ -119,7 +117,7 @@ Untuk pengalaman terbaik di HP Android, klik tombol **"Pasang Aplikasi"** di baw
 
 Kode akses sengaja **tidak ditampilkan secara terbuka** di README ini untuk menjaga keamanan dasar. Berikut cara memperolehnya:
 
-- **Untuk pengguna akhir**: Klik link kecil **"Minta akses"** di halaman awal aplikasi atau di modal gate — akan mengarahkan ke [lynk.id/qafstudio](https://lynk.id/qafstudio) untuk request akses
+- **Untuk pengguna akhir**: Klik link kecil **"Minta akses"** di halaman awal aplikasi atau di modal gate — akan mengarahkan ke [lynk.id/qafstudio](https://lynk.id/qafstudio/1nl20ng051gn) untuk request akses
 - **Atau hubungi langsung** pengembang / guru / pihak yang membagikan aplikasi ini kepada Anda
 - **Untuk pengembang / admin**: Buka file `index.html`, cari deklarasi `var DEV_CODE =` di bagian atas script (sekitar baris 486). Nilai string yang diapit tanda kutip adalah kode aksesnya
 - **Untuk mengganti kode**: Edit nilai `DEV_CODE` di `index.html`. Perubahan langsung berlaku, tidak perlu build step
