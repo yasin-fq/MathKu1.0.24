@@ -3,21 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MathKu - Belajar Berhitung</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FF7043'/><stop offset='50%25' stop-color='%23EC407A'/><stop offset='100%25' stop-color='%23AB47BC'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><text x='32' y='45' font-family='Arial,sans-serif' font-size='30' font-weight='900' text-anchor='middle' fill='white'>1+2</text></svg>">
+<title>MathKu TEST - Semua Level Terbuka</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%234CAF50'/><stop offset='100%25' stop-color='%232E7D32'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><text x='32' y='42' font-family='Arial,sans-serif' font-size='14' font-weight='900' text-anchor='middle' fill='white'>TEST</text></svg>">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180x180.png">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#FF7043">
-<meta name="description" content="Aplikasi belajar berhitung menyenangkan untuk anak Indonesia. Penjumlahan, pengurangan, perkalian, pembagian, dan ujian.">
+<meta name="theme-color" content="#4CAF50">
+<meta name="description" content="MathKu Test Mode - Semua level terbuka untuk pengujian">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="MathKu">
+<meta name="apple-mobile-web-app-title" content="MathKu Test">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* TEST MODE badge */
+  .test-badge{position:fixed;top:14px;left:14px;z-index:360;background:#4CAF50;color:#fff;padding:5px 12px;border-radius:14px;font-size:.72rem;font-weight:800;letter-spacing:.5px;box-shadow:0 2px 8px rgba(76,175,80,.4);pointer-events:none}
+  .test-badge::before{content:'\1F9EA ';font-size:.85rem}
+  /* Reset unlock button */
+  .test-reset{position:fixed;bottom:14px;right:14px;z-index:360;background:#4CAF50;color:#fff;border:none;padding:10px 16px;border-radius:22px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 2px 10px rgba(76,175,80,.35);transition:all .2s;display:flex;align-items:center;gap:6px}
+  .test-reset:hover{background:#2E7D32;transform:translateY(-1px);box-shadow:0 4px 14px rgba(76,175,80,.5)}
+  .test-reset:active{transform:scale(.97)}
+  .test-reset svg{width:14px;height:14px}
+  /* Hide on very small screens to avoid overlap */
+  @media(max-width:360px){.test-badge{font-size:.65rem;padding:4px 10px}}
+</style>
 </head>
 <body>
 <div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div>
+
+<!-- TEST MODE Badge -->
+<div class="test-badge">TEST MODE</div>
 
 <!-- Tombol toggle musik on/off -->
 <button class="sound-toggle" id="sound-toggle" aria-label="Aktifkan/Matikan musik" title="Aktifkan/Matikan musik">
@@ -50,7 +65,7 @@
     <div style="text-align:left;font-size:.88rem;line-height:1.7;color:var(--text);">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--bg-alt);border-radius:10px;">
         <div class="home-logo" style="width:40px;height:40px;margin:0;"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="44" font-family="Arial,sans-serif" font-size="28" font-weight="900" text-anchor="middle" fill="white">1+2</text></svg></div>
-        <div><strong style="font-size:1rem;">MathKu</strong><br><span style="font-size:.78rem;color:var(--text-light);">Version: 1.2.0 (Beta)</span></div>
+        <div><strong style="font-size:1rem;">MathKu</strong><br><span style="font-size:.78rem;color:var(--text-light);">Version: 1.2.0 (Beta) — TEST MODE</span></div>
       </div>
       <div style="margin-bottom:12px;">
         <strong>✨ Features</strong>
@@ -99,7 +114,6 @@
       <button class="install-tab" data-platform="ios" id="i18n-tab-ios">iPhone/iPad</button>
       <button class="install-tab" data-platform="desktop" id="i18n-tab-desktop">Komputer</button>
     </div>
-
     <div class="install-content active" data-platform="android">
       <div class="install-step"><div class="step-num">1</div><div class="step-text" id="i18n-and1"></div></div>
       <div class="install-step"><div class="step-num">2</div><div class="step-text" id="i18n-and2"></div></div>
@@ -108,7 +122,6 @@
       <div class="install-step"><div class="step-num">5</div><div class="step-text" id="i18n-and5"></div></div>
       <div class="install-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span id="i18n-and-note"></span></div>
     </div>
-
     <div class="install-content" data-platform="ios">
       <div class="install-step"><div class="step-num">1</div><div class="step-text" id="i18n-ios1"></div></div>
       <div class="install-step"><div class="step-num">2</div><div class="step-text" id="i18n-ios2"></div></div>
@@ -117,7 +130,6 @@
       <div class="install-step"><div class="step-num">5</div><div class="step-text" id="i18n-ios5"></div></div>
       <div class="install-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span id="i18n-ios-note"></span></div>
     </div>
-
     <div class="install-content" data-platform="desktop">
       <div class="install-step"><div class="step-num">1</div><div class="step-text" id="i18n-dsk1"></div></div>
       <div class="install-step"><div class="step-num">2</div><div class="step-text" id="i18n-dsk2"></div></div>
@@ -128,6 +140,90 @@
     </div>
   </div>
 </div>
+
+<!-- TEST MODE: Pre-populate localStorage with all levels unlocked -->
+<script>
+(function() {
+  // Gunakan SAVE_KEY yang sama dengan app.js agar app langsung membaca data test
+  var SAVE_KEY = 'mathku_v20_newlv';
+
+  // Definisi kategori (harus sync dengan CATS di app.js)
+  var CATS_TEST = [
+    {id:'mencacah', maxLv:2},
+    {id:'penjumlahan', maxLv:11},
+    {id:'pengurangan', maxLv:11},
+    {id:'jumlah_kurang', maxLv:7},
+    {id:'perkalian', maxLv:11},
+    {id:'pembagian', maxLv:10},
+    {id:'kali_bagi', maxLv:8},
+    {id:'advance', maxLv:8},
+    {id:'ujian', maxLv:7}
+  ];
+
+  function defTestProg() {
+    var p = {};
+    for (var i = 0; i < CATS_TEST.length; i++) {
+      var c = CATS_TEST[i];
+      // unlocked = maxLv + 1 (semua level terbuka)
+      p[c.id] = { unlocked: c.maxLv + 1, stars: {} };
+      // Set semua level (0 sampai maxLv) ke 3 bintang
+      for (var j = 0; j <= c.maxLv; j++) {
+        p[c.id].stars[j] = 3;
+      }
+    }
+    // mencacah intro marker (stars[0] = 1 = intro selesai)
+    if (p.mencacah) p.mencacah.stars[0] = 1;
+    // ujian: unlocked harus >= 8 (sesuai normalizeProgress)
+    p.ujian.unlocked = 8;
+    return p;
+  }
+
+  // Cek apakah sudah ada data test
+  var existing = null;
+  try { existing = localStorage.getItem(SAVE_KEY); } catch(e) {}
+
+  // Selalu tulis data test (overwrite data lama)
+  var testData = {
+    users: [{
+      id: 'test-user',
+      name: 'Tester',
+      progress: defTestProg()
+    }],
+    currentUserId: 'test-user',
+    accessGranted: true  // Semua gate terbuka
+  };
+
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(testData));
+    console.log('[TEST MODE] All levels unlocked & accessGranted=true');
+  } catch(e) {
+    console.error('[TEST MODE] Failed to set test data:', e);
+  }
+
+  // Expose function untuk reset (dipanggil dari tombol)
+  window.resetTestUnlock = function() {
+    try {
+      var data = JSON.parse(localStorage.getItem(SAVE_KEY));
+      if (data && data.users && data.users[0]) {
+        data.users[0].progress = defTestProg();
+        data.accessGranted = true;
+        localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+        console.log('[TEST MODE] Reset done');
+        // Reload halaman untuk apply
+        location.reload();
+      }
+    } catch(e) {
+      console.error('[TEST MODE] Reset failed:', e);
+    }
+  };
+})();
+</script>
+
+<!-- Tombol Reset Unlock (TEST MODE) -->
+<button class="test-reset" id="test-reset" onclick="resetTestUnlock()" title="Reset & unlock semua level">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+  Reset Unlock
+</button>
 
 <script src="js/app.js"></script>
 </body>

@@ -4,7 +4,7 @@
    Strategi: Cache-first untuk aset statis, network-first untuk halaman
    ================================================================ */
 
-var CACHE_VERSION = 'mathku-v1.0.25-pwa';
+var CACHE_VERSION = 'mathku-v1.2.1-newlv';
 var STATIC_CACHE = CACHE_VERSION + '-static';
 var RUNTIME_CACHE = CACHE_VERSION + '-runtime';
 
@@ -12,6 +12,8 @@ var RUNTIME_CACHE = CACHE_VERSION + '-runtime';
 var APP_SHELL = [
   './',
   './index.html',
+  './css/style.css',
+  './js/app.js',
   './manifest.json',
   './icon.svg',
   './icons/favicon-32x32.png',
