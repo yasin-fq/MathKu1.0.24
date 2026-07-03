@@ -2,8 +2,6 @@
 
 <div align="center">
 
-![MathKu](icon.svg)
-
 **Aplikasi edukasi matematika untuk anak Indonesia**
 
 Belajar berhitung dengan cara yang menyenangkan — penjumlahan, pengurangan, perkalian, pembagian, kombinasi, soal advance, dan mode ujian. Progres otomatis tersimpan, bisa dipasang sebagai aplikasi (PWA), dan berfungsi offline.
